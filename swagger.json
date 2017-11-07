@@ -1,0 +1,3256 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "IMN API",
+    "description": "# The REST API of IMN system\n## Overview\nThe REST APIs provide programmatic access to read and write IMN data. \nBasically, with this API you will be able to do everything like you were with your browser on https://go.imn.io !\n\nThe main features are:\n- Register and manage your account\n- Create and manage and share your stores with your friends/co-workers.\n- Import your product catalog and schedule the auto importation\n- Search the channels your want to use\n- Configure your channels for your catalogs to export your product information:\n    - cost and general settings\n    - category and columns mappings\n    - your will be able to create and manage your custom column\n    - put in place exlusion filters based on simple conditions on your product data\n    - override product values\n    - get product vision for a channel catalog scope\n- Analyze and optimize your performance of your catalogs on all yours channels with different type of reportings by day, channel, category and by product.\n- Automatize your optimisation by using rules!\n- And of course... Manage your orders harvested from all your marketplaces:\n    - Synchronize your orders in an uniformized way\n    - Get the available actions and update the order status\n- ...and more!\n\n## Authentication credentials\nThe public API with the base path **/v2/public** have been put in place to give you an entry point to our system for the user registration, login and lost password. The public API does not require any credentials.\nWe give you the some public list of values and public channels for our public commercial web site [www.imn.io](http://www.imn.io).\n\nThe user API with the base path **/v2/user** requires a token which is available on this page:\nhttps://go.imn.io/Account/MyAccount\n\n## Things to keep in mind\n### API Rate Limits\n- The IMN REST API is limited to 100 calls/minute.\n\n### Media type\nThe default media type for requests and responses is application/json. Where noted, some operations support other content types. If no additional content type is mentioned for a specific operation, then the media type is application/json.\n\n### Required content type\nThe required and default encoding for the request and responses is UTF8.\n\n### Required date time format\nAll our date time are formatted in ISO 8601 format: 2014-06-24T16:25:00Z.\n\n### Base URL\nThe Base URL of the IMN API Order Management REST API conforms to the following template.\n\nhttps://api.imn.io\n\nAll URLs returned by the IMN API are relative to this base URL, and all requests to the REST API must use this base URL template.\n\nYou can test our API on https://api-docs.imn.io/swagger-ui\\\nYou can contact us on [gitter, #IMN/API](https://gitter.im/IMN/API)\n",
+    "version": "1.0",
+    "x-logo": {
+      "url": "https://avatars0.githubusercontent.com/u/25665430",
+      "backgroundColor": "#FFFFFF"
+    },
+    "contact": {
+      "email": "support@imn.io"
+    },
+    "license": {
+      "name": "IMN",
+      "url": "https://go.imn.io"
+    }
+  },
+  "host": "api.imn.io",
+  "basePath": "/v1",
+  "x-IMN-api-ops": {
+    "repo": "Customer",
+    "apiName": "V1UserMarketplaces",
+    "appRoot": "IMN.Customer.WebService",
+    "namespace": "IMN.Customer.WebService",
+    "comment": "No change. Just server side generation.\n"
+  },
+  "x-basePath": "/v1/merchant/marketplaces",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Merchant API - User - Marketplaces - Global",
+      "x-displayName": "Global"
+    },
+    {
+      "name": "Merchant API - User - Marketplaces - Marketplace",
+      "x-displayName": "Marketplace"
+    },
+    {
+      "name": "Merchant API - User - Marketplaces - Api Credentials",
+      "x-displayName": "Api Credentials"
+    },
+    {
+      "name": "Merchant API - User - Marketplaces - Transport Settings",
+      "x-displayName": "Transport Settings"
+    },
+    {
+      "name": "Merchant API - User - Marketplaces - Pricing Settings",
+      "x-displayName": "Pricing Settings"
+    },
+    {
+      "name": "Merchant API - User - Marketplaces - Activation",
+      "x-displayName": "Activation"
+    },
+    {
+      "name": "Merchant API - Public - Security - Global",
+      "x-displayName": "Global"
+    },
+    {
+      "name": "Merchant API - Public - Security - Security",
+      "x-displayName": "Security"
+    },
+    {
+      "name": "Merchant API - Public - List of Values - LOV",
+      "description": "All LOV operations",
+      "x-displayName": "LOV"
+    },
+    {
+      "name": "Merchant API - User - List of Values - LOV",
+      "description": "All LOV operations",
+      "x-displayName": "LOV"
+    },
+    {
+      "name": "Merchant API - User - Wallet - Global",
+      "x-displayName": "Global"
+    },
+    {
+      "name": "Merchant API - User - Wallet - Wallet",
+      "x-displayName": "Wallet"
+    }
+  ],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Ocp-Apim-Subscription-Key"
+    }
+  },
+  "paths": {
+    "/merchant/marketplaces/": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Global"
+        ],
+        "summary": "Get the marketplaces index",
+        "operationId": "GetMarketplacesIndex",
+        "responses": {
+          "200": {
+            "description": "The marketplaces index",
+            "schema": {
+              "$ref": "#/definitions/marketplacesIndex"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/pricingRules": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Global"
+        ],
+        "summary": "Get pricing rules",
+        "operationId": "GetPricingRules",
+        "responses": {
+          "200": {
+            "description": "The marketplaces pricing rules",
+            "schema": {
+              "$ref": "#/definitions/marketplacePricingRuleList"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/{marketplaceCode}": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Marketplace"
+        ],
+        "summary": "Get the marketplace index",
+        "operationId": "GetMarketplaceIndex",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The marketplace index",
+            "schema": {
+              "$ref": "#/definitions/marketplaceIndex"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/{marketplaceCode}/apiCredential": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Api Credentials"
+        ],
+        "summary": "Get the marketplace API credential",
+        "operationId": "GetMarketplaceApiCredential",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The marketplace API credential",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.MarketplaceApiCredential"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Api Credentials"
+        ],
+        "summary": "Save the marketplace API credential",
+        "operationId": "SaveMarketplaceApiCredential",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.MarketplaceApiCredential"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Marketplace API credentials saved"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/{marketplaceCode}/transportSettings": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Transport Settings"
+        ],
+        "summary": "Get the transport settings for this marketplace",
+        "operationId": "GetMarketplaceTransportSettings",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The transport settings for this marketplace",
+            "schema": {
+              "$ref": "#/definitions/marketplaceTransportSettingList"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Transport Settings"
+        ],
+        "summary": "Save the transport settings for this marketplace",
+        "operationId": "SaveMarketplaceTransportSettings",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/marketplaceTransportSettingList"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Transport settings configured for this marketplace"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/{marketplaceCode}/pricingSetting": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Pricing Settings"
+        ],
+        "summary": "Get the pricing setting for this marketplace",
+        "operationId": "GetMarketplacePricingSetting",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The pricing settings for this marketplace",
+            "schema": {
+              "$ref": "#/definitions/marketplacePricingSetting"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Pricing Settings"
+        ],
+        "summary": "Save the pricing setting for this marketplace",
+        "operationId": "SaveMarketplacePricingSetting",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/marketplacePricingSetting"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pricing setting configured for this marketplace"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/{marketplaceCode}/enable": {
+      "post": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Activation"
+        ],
+        "summary": "Enable offers publication the marketplace",
+        "operationId": "EnableMarketplace",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The marketplace has been enabled"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/{marketplaceCode}/disable": {
+      "post": {
+        "tags": [
+          "Merchant API - User - Marketplaces - Activation"
+        ],
+        "summary": "Disable offers publication to the marketplace",
+        "operationId": "DisableMarketplace",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The marketplace has been disabled"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/public/security/": {
+      "get": {
+        "tags": [
+          "Merchant API - Public - Security - Global"
+        ],
+        "summary": "Get the public security index",
+        "operationId": "GetPublicSecurityIndex",
+        "responses": {
+          "200": {
+            "description": "The public security index",
+            "schema": {
+              "$ref": "#/definitions/publicSecurityIndex"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/public/security/login": {
+      "get": {
+        "tags": [
+          "Merchant API - Public - Security - Security"
+        ],
+        "summary": "Get Login Info",
+        "operationId": "GetLoginInfo",
+        "responses": {
+          "200": {
+            "description": "LoginInfo",
+            "schema": {
+              "$ref": "#/definitions/loginInfo"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/public/security/login/{marketplaceCode}": {
+      "post": {
+        "tags": [
+          "Merchant API - Public - Security - Security"
+        ],
+        "summary": "Login",
+        "description": "User Login - The login will give your tokens",
+        "operationId": "Login",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.MarketplaceApiCredential"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your tokens",
+            "schema": {
+              "$ref": "#/definitions/apiCredentials"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ErrorResponseMessage"
+            }
+          },
+          "403": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/public/lov/": {
+      "get": {
+        "summary": "Get all list names",
+        "operationId": "GetPublicLovIndex",
+        "parameters": [
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/ifNoneMatchParameter"
+          }
+        ],
+        "tags": [
+          "Merchant API - Public - List of Values - LOV"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the list names",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/publicLovIndex"
+            }
+          },
+          "304": {
+            "description": "The ETag sent in the http header If-None-Match did not change. So you can keep your version.",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/public/lov/{listName}": {
+      "get": {
+        "tags": [
+          "Merchant API - Public - List of Values - LOV"
+        ],
+        "summary": "Get the list of values related to this list name",
+        "operationId": "GetPublicListOfValues",
+        "parameters": [
+          {
+            "name": "listName",
+            "in": "path",
+            "required": true,
+            "description": "The list of value name your want to get",
+            "type": "string"
+          },
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/acceptLanguageParameter"
+          },
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/ifNoneMatchParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of values",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "Content-Language": {
+                "description": "Indicates the language use in the response",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/publicListOfValuesResponse"
+            }
+          },
+          "304": {
+            "description": "The ETag sent in the http header If-None-Match did not change. So you can keep your version.",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "List not found",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ErrorResponseMessage"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/user/lov/": {
+      "get": {
+        "summary": "Get all list names",
+        "operationId": "GetUserLovIndex",
+        "tags": [
+          "Merchant API - User - List of Values - LOV"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the list names",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/userLovIndex"
+            }
+          },
+          "304": {
+            "description": "The ETag sent in the http header If-None-Match did not change. So you can keep your version.",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/user/lov/{listName}": {
+      "get": {
+        "tags": [
+          "Merchant API - User - List of Values - LOV"
+        ],
+        "summary": "Get the list of values related to this list name",
+        "operationId": "GetUserListOfValues",
+        "parameters": [
+          {
+            "name": "listName",
+            "in": "path",
+            "required": true,
+            "description": "The list of value name your want to get",
+            "type": "string"
+          },
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/acceptLanguageParameter"
+          },
+          {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/parameters/ifNoneMatchParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of values",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "Content-Language": {
+                "description": "Indicates the language use in the response",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/userListOfValuesResponse"
+            }
+          },
+          "304": {
+            "description": "The ETag sent in the http header If-None-Match did not change. So you can keep your version.",
+            "headers": {
+              "ETag": {
+                "description": "The ETag corresponding to the LOV Index",
+                "type": "string"
+              },
+              "Cache-Control": {
+                "description": "Indicates the directive around the caching mechanisms.\\\nFor more information, please go to this link: https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9\n",
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "List not found",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ErrorResponseMessage"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/user/wallet/": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Wallet - Global"
+        ],
+        "summary": "Get the wallet index",
+        "operationId": "GetWalletIndex",
+        "responses": {
+          "200": {
+            "description": "The wallet index",
+            "schema": {
+              "$ref": "#/definitions/walletIndex"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/user/wallet/properties": {
+      "get": {
+        "tags": [
+          "Merchant API - User - Wallet - Wallet"
+        ],
+        "summary": "Get the wallet property list",
+        "description": "Depending to the template code the property list will be different. \nThis will be useful to display the property list expected by a marketplace.\n",
+        "operationId": "GetWalletPropertyList",
+        "parameters": [
+          {
+            "name": "templateCode",
+            "description": "The template code is optional, by default you will get all your wallet properties.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The wallet property list",
+            "schema": {
+              "$ref": "#/definitions/walletPropertGroupList"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Merchant API - User - Wallet - Wallet"
+        ],
+        "summary": "Save wallet property infos",
+        "operationId": "SaveWalletPropertyInfos",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "description": "The wallet property infos you want to pass",
+            "schema": {
+              "$ref": "#/definitions/saveWalletPropertyInfoSettingsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Wallet property infos saved"
+          },
+          "400": {
+            "description": "One or more property keys or values are invalid. See response for details.",
+            "schema": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ErrorResponseMessage"
+            }
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/user/wallet/properties/{walletPropertyCode}/document/{documentPartNumber}": {
+      "put": {
+        "tags": [
+          "Merchant API - User - Wallet - Wallet"
+        ],
+        "summary": "Save wallet document",
+        "operationId": "SaveWalletDocument",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/walletPropertyCodeParameter"
+          },
+          {
+            "name": "documentPartNumber",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "The part number of your document",
+            "default": 0
+          },
+          {
+            "name": "request",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "The document file you want to upload"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Wallet document saved"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Merchant API - User - Wallet - Wallet"
+        ],
+        "summary": "Delete wallet document",
+        "operationId": "DeleteWalletDocument",
+        "parameters": [
+          {
+            "$ref": "#/parameters/walletPropertyCodeParameter"
+          },
+          {
+            "name": "documentPartNumber",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "The part number of your document",
+            "default": 0
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Wallet document delete"
+          },
+          "default": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/responses/GeneralError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "links.GetPricingRulesLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/marektplaces/pricingRules",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.GetMarketplaceApiCredentialLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/marektplaces/eprice/credential",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.GetMarketplaceTransportSettingsLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/marektplaces/eprice/transportSettings",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.GetMarketplacePricingSettingLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/marektplaces/eprice/pricingSetting",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.EnableMarketplaceLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/marektplaces/eprice/enable",
+            "method": "POST"
+          }
+        }
+      ]
+    },
+    "links.DisableMarketplaceLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/marektplaces/eprice/disable",
+            "method": "POST"
+          }
+        }
+      ]
+    },
+    "links.MarketplacePricingRuleTypeLOVLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/lov/MarketplacePricingRuleType",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.TransportTypeStandardLOVLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/lov/TransportTypeStandard",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "marketplacesIndexLinks": {
+      "type": "object",
+      "properties": {
+        "pricingRuleTypeLOV": {
+          "$ref": "#/definitions/links.MarketplacePricingRuleTypeLOVLink"
+        },
+        "transportTypeStandardLOV": {
+          "$ref": "#/definitions/links.TransportTypeStandardLOVLink"
+        },
+        "pricingRules": {
+          "$ref": "#/definitions/links.GetPricingRulesLink"
+        }
+      }
+    },
+    "marketplacesIndex": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/marketplacesIndexLinks"
+        },
+        "marketplaces": {
+          "type": "object",
+          "description": "The key is the marketplace code",
+          "additionalProperties": {
+            "$ref": "#/definitions/marketplaceIndex"
+          }
+        }
+      }
+    },
+    "marketplaceIndexLinks": {
+      "type": "object",
+      "properties": {
+        "transportTypeLOV": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        },
+        "apiCredential": {
+          "$ref": "#/definitions/links.GetMarketplaceApiCredentialLink"
+        },
+        "transportSettings": {
+          "$ref": "#/definitions/links.GetMarketplaceTransportSettingsLink"
+        },
+        "pricingSetting": {
+          "$ref": "#/definitions/links.GetMarketplacePricingSettingLink"
+        },
+        "enable": {
+          "$ref": "#/definitions/links.EnableMarketplaceLink"
+        },
+        "disable": {
+          "$ref": "#/definitions/links.DisableMarketplaceLink"
+        }
+      }
+    },
+    "marketplaceIndex": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/marketplaceInfo"
+        },
+        "links": {
+          "$ref": "#/definitions/marketplaceIndexLinks"
+        }
+      }
+    },
+    "marketplaceInfo": {
+      "type": "object",
+      "required": [
+        "code",
+        "imageUrl",
+        "credentialStatus",
+        "transportSettingsStatus"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.MarketplaceCode"
+        },
+        "imageUrl": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.HttpUrl"
+        },
+        "credentialStatus": {
+          "$ref": "#/definitions/markeplaceCredentialStatus"
+        },
+        "transportSettingsStatus": {
+          "$ref": "#/definitions/marketplaceTransportSettingsStatus"
+        }
+      }
+    },
+    "markeplaceCredentialStatus": {
+      "description": "The marketplace credential status",
+      "type": "string",
+      "enum": [
+        "configured",
+        "notConfigured"
+      ]
+    },
+    "marketplaceTransportSettingsStatus": {
+      "description": "The marketplace transport settings status",
+      "type": "string",
+      "enum": [
+        "configured",
+        "notConfigured"
+      ]
+    },
+    "marketplaceTransportSettingList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/marketplaceTransportSetting"
+      }
+    },
+    "marketplaceTransportSetting": {
+      "type": "object",
+      "required": [
+        "transportType",
+        "shippingCharge",
+        "additionalShippingCharge"
+      ],
+      "properties": {
+        "transportType": {
+          "type": "string",
+          "example": "Standard"
+        },
+        "shippingCharge": {
+          "type": "number",
+          "example": 3.35
+        },
+        "additionalShippingCharge": {
+          "type": "number",
+          "example": 1.52
+        }
+      }
+    },
+    "marketplacePricingSetting": {
+      "type": "object",
+      "required": [
+        "ruleType"
+      ],
+      "properties": {
+        "ruleType": {
+          "$ref": "#/definitions/marketplacePricingRuleType"
+        },
+        "value": {
+          "type": "number",
+          "example": 42.01
+        }
+      }
+    },
+    "marketplacePricingRuleList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/marketplacePricingRule"
+      }
+    },
+    "marketplacePricingRule": {
+      "type": "object",
+      "required": [
+        "ruleType"
+      ],
+      "properties": {
+        "ruleType": {
+          "$ref": "#/definitions/marketplacePricingRuleType"
+        },
+        "operatorType": {
+          "type": "string",
+          "enum": [
+            "plus",
+            "minus"
+          ],
+          "example": "plus"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "percent",
+            "amount"
+          ],
+          "example": "percent"
+        }
+      }
+    },
+    "marketplacePricingRuleType": {
+      "type": "string",
+      "default": "SamePricing",
+      "enum": [
+        "PercentIncreasePricing",
+        "PercentDecreasePricing",
+        "AmountIncreasePricing",
+        "AmountDecreasePricing",
+        "SamePricing"
+      ],
+      "x-lov": "MarketplacePricingRuleType"
+    },
+    "links.LoginLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "description": "The link to the login",
+          "example": {
+            "label": "Login to Cdiscount",
+            "href": "/v1/public/security/login/cdiscount",
+            "method": "POST",
+            "urlTemplated": false,
+            "allRequiredParamsProvided": true,
+            "parameters": {
+              "request": {
+                "in": "body",
+                "type": "object",
+                "schema": "marketplaceApiCredentials",
+                "required": true,
+                "properties": {
+                  "login": {
+                    "type": "string",
+                    "required": true,
+                    "pattern": "*.-api$"
+                  },
+                  "password": {
+                    "in": "body",
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "links.GetLoginInfoLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "description": "The link to the login",
+          "example": {
+            "href": "/v1/public/security/login",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "publicSecurityIndexLinks": {
+      "type": "object",
+      "required": [
+        "login"
+      ],
+      "properties": {
+        "login": {
+          "$ref": "#/definitions/links.GetLoginInfoLink"
+        }
+      }
+    },
+    "publicSecurityIndex": {
+      "type": "object",
+      "required": [
+        "links"
+      ],
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/publicSecurityIndexLinks"
+        }
+      }
+    },
+    "loginInfo": {
+      "type": "object",
+      "required": [
+        "links"
+      ],
+      "properties": {
+        "links": {
+          "type": "object",
+          "description": "For each marketplace code identifier the expected parameters for the login",
+          "additionalProperties": {
+            "$ref": "#/definitions/links.LoginLink"
+          },
+          "example": {
+            "cdiscount": {
+              "label": "Login to Cdiscount [img](http://marketplace.cdiscount.com/wp-content/uploads/2016/03/LOGO-Cdiscount-MKP-300x212.png)",
+              "href": "/v1/public/security/login/cdiscount",
+              "method": "POST",
+              "urlTemplated": false,
+              "allRequiredParamsProvided": true,
+              "parameters": {
+                "request": {
+                  "in": "body",
+                  "type": "object",
+                  "schema": "marketplaceApiCredentials",
+                  "required": true,
+                  "properties": {
+                    "login": {
+                      "type": "string",
+                      "required": true,
+                      "pattern": "*.-api$"
+                    },
+                    "password": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            },
+            "eprice": {
+              "label": "Login to EPRICE [img](https://m.eprice.it/layout/images/mobile/logo.png)",
+              "href": "/v1/public/security/login/eprice",
+              "method": "POST",
+              "urlTemplated": false,
+              "allRequiredParamsProvided": true,
+              "parameters": {
+                "request": {
+                  "in": "body",
+                  "type": "object",
+                  "schema": "marketplaceApiCredentials",
+                  "required": true,
+                  "properties": {
+                    "apiKey": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "shopId": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            },
+            "bol": {
+              "label": "Login to BOL [img](https://s.s-bol.com/nl/static/images/main/bolcom_logo.png)",
+              "href": "/v1/public/security/login/bol",
+              "method": "POST",
+              "urlTemplated": false,
+              "allRequiredParamsProvided": true,
+              "parameters": {
+                "request": {
+                  "in": "body",
+                  "type": "object",
+                  "schema": "marketplaceApiCredentials",
+                  "required": true,
+                  "properties": {
+                    "publicAPIKey": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "privateAPIKey": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            },
+            "realde": {
+              "label": "Login to REAL.DE [img](https://www.real.de/static/dist/images/frontend-core/real-logo.4caa4283.svg)",
+              "href": "/v1/public/security/login/realde",
+              "method": "POST",
+              "urlTemplated": false,
+              "allRequiredParamsProvided": true,
+              "parameters": {
+                "request": {
+                  "in": "body",
+                  "type": "object",
+                  "schema": "marketplaceApiCredentials",
+                  "required": true,
+                  "properties": {
+                    "clientAPIKey": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "secretAPIKey": {
+                      "type": "string",
+                      "required": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "apiCredentials": {
+      "type": "object",
+      "required": [
+        "credentials"
+      ],
+      "properties": {
+        "credentials": {
+          "description": "Your API credential list",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiCredential"
+          },
+          "example": [
+            {
+              "productName": "UserAPI",
+              "primaryToken": "3b22980d8d1143c6ba7adf4e55b9a153",
+              "secondaryToken": "162ae17fd52044c38cce3388ea5b0c91"
+            }
+          ]
+        }
+      }
+    },
+    "apiCredential": {
+      "description": "Your api credential",
+      "type": "object",
+      "required": [
+        "productName",
+        "primaryToken",
+        "secondaryToken"
+      ],
+      "properties": {
+        "productName": {
+          "description": "The product name related to this credential",
+          "type": "string",
+          "example": "UserAPI"
+        },
+        "primaryToken": {
+          "description": "The primary token to be used in the next call in the user scope API",
+          "type": "string",
+          "example": "3b22980d8d1143c6ba7adf4e55b9a153"
+        },
+        "secondaryToken": {
+          "description": "The secondary token. Could be usefull if you want to share your access with someone else.",
+          "type": "string",
+          "example": "162ae17fd52044c38cce3388ea5b0c91"
+        }
+      }
+    },
+    "publicLovIndex": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/publicLovIndexLinks"
+        }
+      }
+    },
+    "publicLovIndexLinks": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetPublicLovIndexLink"
+        },
+        "lists": {
+          "$ref": "#/definitions/publicLovLinks"
+        }
+      }
+    },
+    "publicLovLinks": {
+      "description": "List of lov link. The key is the list name.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/links.GetPublicListOfValuesLink"
+      }
+    },
+    "links.GetPublicListOfValuesLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "example": {
+            "href": "/v1/public/lov/Go2CultureName",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.GetPublicLovIndexLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "example": {
+            "href": "/v1/public/lov",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "publicListOfValuesResponse": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/publicListOfValuesResponseLinks"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ListOfValueItem"
+          }
+        }
+      }
+    },
+    "publicListOfValuesResponseLinks": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetPublicListOfValuesLink"
+        }
+      }
+    },
+    "userLovIndex": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/userLovIndexLinks"
+        }
+      }
+    },
+    "userLovIndexLinks": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetUserLovIndexLink"
+        },
+        "lists": {
+          "$ref": "#/definitions/userLovLinks"
+        }
+      }
+    },
+    "userLovLinks": {
+      "description": "List of lov link. The key is the list name.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/links.GetUserListOfValuesLink"
+      }
+    },
+    "links.GetUserListOfValuesLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "example": {
+            "href": "/v1/user/lov/Go2CultureName",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.GetUserLovIndexLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "example": {
+            "href": "/v1/user/lov",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "userListOfValuesResponse": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/userListOfValuesResponseLinks"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ListOfValueItem"
+          }
+        }
+      }
+    },
+    "userListOfValuesResponseLinks": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetUserListOfValuesLink"
+        }
+      }
+    },
+    "links.SaveWalletDocumentLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/wallet/properties/IBAN/document",
+            "method": "PUT"
+          }
+        }
+      ]
+    },
+    "links.DeleteWalletDocumentLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/wallet/properties/IBAN/document",
+            "method": "DELETE"
+          }
+        }
+      ]
+    },
+    "links.SaveWalletPropertyInfosLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/wallet/properties",
+            "method": "POST"
+          }
+        }
+      ]
+    },
+    "links.GetWalletPropertyListLink": {
+      "allOf": [
+        {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/v1/user/wallet/properties",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "walletIndexLinks": {
+      "description": "Tells you want you can do on this API",
+      "type": "object",
+      "required": [
+        "properties",
+        "walletPropertyCodeLov",
+        "walletPropertyGroupCodeLov"
+      ],
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/links.GetWalletPropertyListLink"
+        },
+        "walletPropertyCodeLov": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        },
+        "walletPropertyGroupCodeLov": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        }
+      }
+    },
+    "walletIndex": {
+      "type": "object",
+      "required": [
+        "links"
+      ],
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/walletIndexLinks"
+        }
+      }
+    },
+    "walletPropertGroupListLinks": {
+      "type": "object",
+      "required": [
+        "savePropertyInfos"
+      ],
+      "properties": {
+        "savePropertyInfos": {
+          "$ref": "#/definitions/links.SaveWalletPropertyInfosLink"
+        }
+      }
+    },
+    "walletPropertGroupList": {
+      "type": "object",
+      "required": [
+        "groups",
+        "links"
+      ],
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/walletPropertyGroup"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/walletPropertGroupListLinks"
+        }
+      }
+    },
+    "walletPropertyGroup": {
+      "type": "object",
+      "required": [
+        "propertyGroupCode",
+        "properties"
+      ],
+      "properties": {
+        "propertyGroupCode": {
+          "type": "string",
+          "description": "The wallet property group code",
+          "x-lov": "WalletPropertyGroupCode",
+          "example": "General"
+        },
+        "propertyGroupPosition": {
+          "type": "integer",
+          "description": "Indicate the position of the property in the display group",
+          "minimum": 1,
+          "example": 1
+        },
+        "properties": {
+          "$ref": "#/definitions/walletPropertyList"
+        }
+      }
+    },
+    "walletPropertyList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/walletPropertyBase"
+      }
+    },
+    "saveWalletPropertyInfoSettingsRequest": {
+      "type": "object",
+      "properties": {
+        "propertySettings": {
+          "type": "array",
+          "description": "The property infos you want to set up (insert/update) you can delete a property info by setting the values to null.",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/definitions/walletPropertySetting"
+          }
+        }
+      }
+    },
+    "walletPropertySetting": {
+      "description": "It's possible to set null to the values to clear the property.",
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/walletPropertyCode"
+        },
+        "values": {
+          "$ref": "#/definitions/walletPropertyValues"
+        }
+      }
+    },
+    "walletPropertyType": {
+      "type": "string",
+      "enum": [
+        "walletPropertyInfo",
+        "walletDocumentInfo"
+      ],
+      "example": "walletPropertyInfo"
+    },
+    "walletPropertyBase": {
+      "type": "object",
+      "discriminator": "propertyType",
+      "required": [
+        "code",
+        "propertyType"
+      ],
+      "properties": {
+        "propertyType": {
+          "$ref": "#/definitions/walletPropertyType"
+        },
+        "code": {
+          "$ref": "#/definitions/walletPropertyCode"
+        },
+        "description": {
+          "type": "string",
+          "description": "Indicate the description of the property",
+          "example": "If true allows to retireve one marketplace country only"
+        },
+        "position": {
+          "type": "integer",
+          "description": "Indicate the position of the property in the display group",
+          "minimum": 1,
+          "example": 1
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Indicate if the property is required or not",
+          "default": false,
+          "example": true
+        }
+      }
+    },
+    "walletPropertyValues": {
+      "description": "A property could have more than one value that's the reason why we anticipate the situation with an array. \nWe choose object to allow any type.\n",
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "walletPropertyInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/walletPropertyBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "code",
+            "valueType"
+          ],
+          "properties": {
+            "values": {
+              "$ref": "#/definitions/walletPropertyValues"
+            },
+            "valueType": {
+              "$ref": "#/definitions/walletPropertyValueType"
+            },
+            "default": {
+              "description": "Indicate the default values of the property",
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "example": [
+                true
+              ]
+            },
+            "readOnly": {
+              "type": "boolean",
+              "description": "Indicate if the value cannot be changed.",
+              "default": false,
+              "example": false
+            },
+            "minLength": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Indicates the minimum size of the property value",
+              "default": 0,
+              "minimum": 0,
+              "example": 1
+            },
+            "maxLength": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Indicates the maximum size of the property value",
+              "minimum": 1,
+              "example": 500
+            },
+            "minItems": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Indicates the minimum item count of the property value.",
+              "default": 1,
+              "minimum": 0,
+              "example": 1
+            },
+            "maxItems": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Indicates the maximum item count of the property value",
+              "default": 1,
+              "minimum": 1,
+              "example": 2
+            },
+            "lovLink": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+            },
+            "lovRequired": {
+              "type": "boolean",
+              "description": "Indicates if the property value must be in the list of value.",
+              "default": false,
+              "example": true
+            },
+            "visible": {
+              "type": "boolean",
+              "description": "Indicates if this property should be displayed in the configuration page.",
+              "default": true,
+              "example": true
+            },
+            "pattern": {
+              "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ValidationPattern"
+            }
+          }
+        }
+      ]
+    },
+    "walletDocumentInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/walletPropertyBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "code",
+            "authorizedContentTypes",
+            "links"
+          ],
+          "properties": {
+            "authorizedContentTypes": {
+              "$ref": "#/definitions/walletDocumentAuthorizedContentTypeList"
+            },
+            "maxSizeInKiloBytes": {
+              "description": "Indicate the maximum size of a document in Kilo Bytes.",
+              "type": "integer",
+              "default": 1024,
+              "example": 1024
+            },
+            "maxDocumentPartCount": {
+              "type": "integer",
+              "default": 1,
+              "description": "The maximum part of document that could be uploaded",
+              "example": 1
+            },
+            "parts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/walletDocumentPartInfo"
+              }
+            },
+            "links": {
+              "$ref": "#/definitions/walletDocumentInfoLinks"
+            }
+          }
+        }
+      ]
+    },
+    "walletDocumentPartInfo": {
+      "type": "object",
+      "required": [
+        "number"
+      ],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "description": "The part number of the document"
+        },
+        "url": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.HttpUrl"
+        }
+      }
+    },
+    "walletDocumentAuthorizedContentTypeList": {
+      "description": "Indicates the list of content type authorized for a document",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "example": [
+        "image/png",
+        "image/jpg",
+        "image/gif",
+        "image/svg",
+        "application/pdf"
+      ]
+    },
+    "walletPropertyValueType": {
+      "description": "The value type of the wallet property.\n",
+      "type": "string",
+      "enum": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "date",
+        "date-time"
+      ],
+      "default": "string",
+      "example": "string"
+    },
+    "walletDocumentInfoLinks": {
+      "description": "Indicates the operations you can do on a document",
+      "type": "object",
+      "required": [
+        "save"
+      ],
+      "properties": {
+        "save": {
+          "$ref": "#/definitions/links.SaveWalletDocumentLink"
+        },
+        "delete": {
+          "$ref": "#/definitions/links.DeleteWalletDocumentLink"
+        }
+      }
+    },
+    "walletPropertyCode": {
+      "type": "string",
+      "description": "Wallet information code",
+      "example": "IBAN",
+      "x-lov": "WalletPropertyCode"
+    },
+    "IMN.Common.MarketplaceCode": {
+      "type": "string",
+      "description": "The marketplace code identifier in IMN"
+    },
+    "IMN.Common.PaginationRequestParameters": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.PageSize"
+        },
+        "pageNumber": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.PageNumber"
+        }
+      }
+    },
+    "IMN.Common.PageSize": {
+      "description": "Indicate the item count per page",
+      "type": "integer",
+      "format": "int32",
+      "default": 100,
+      "minimum": 25,
+      "maximum": 100,
+      "example": 100
+    },
+    "IMN.Common.PageNumber": {
+      "description": "Indicates the page number",
+      "format": "int32",
+      "type": "integer",
+      "example": 1,
+      "minimum": 1,
+      "default": 1
+    },
+    "IMN.Common.CatalogCategoryFilter": {
+      "type": "object",
+      "properties": {
+        "categoryPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Indicates on which catalog category path you want to make the filter",
+          "example": [
+            "Maison",
+            "Chambre"
+          ]
+        }
+      }
+    },
+    "IMN.Common.ChannelCategoryFilter": {
+      "type": "object",
+      "properties": {
+        "categoryPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Indicates on which channel category path you want to make the filter",
+          "example": [
+            "Home",
+            "Bedroom"
+          ]
+        }
+      }
+    },
+    "IMN.Common.ProductFilters": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string",
+          "description": "The product sku filter",
+          "example": "M1234"
+        },
+        "title": {
+          "type": "string",
+          "description": "The product title filter",
+          "example": "RefrigÃ©rateur"
+        },
+        "additionalProductFilters": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.AdditionalProductFilters"
+        }
+      }
+    },
+    "IMN.Common.AdditionalProductFiltersValue": {
+      "type": "object",
+      "properties": {
+        "operatorName": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ProductFilterOperatorName"
+        },
+        "values": {
+          "description": "Must be null if the operator is \"IsNull\" or \"IsNotNull\". \nCan contains multiple value in case of \"InList\" operator. Otherwise a single value is expected.\n",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "My value"
+          ]
+        }
+      },
+      "example": {
+        "672644c7-5bd0-4e25-88c1-1f732bda5e4c": {
+          "operatorName": "GreaterTo",
+          "values": [
+            100
+          ]
+        }
+      }
+    },
+    "IMN.Common.AdditionalProductFilters": {
+      "type": "object",
+      "description": "Describe a filter on a product's column.\nThe key is the column identifier of your catalog or a custom column.\n",
+      "additionalProperties": {
+        "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.AdditionalProductFiltersValue"
+      }
+    },
+    "IMN.Common.ProductFilterOperatorName": {
+      "type": "string",
+      "description": "Indicate the operator you want to make on the columnId",
+      "enum": [
+        "Equals",
+        "Contains",
+        "GreaterTo",
+        "LowerTo",
+        "InList",
+        "IsNull",
+        "IsNotNull"
+      ]
+    },
+    "IMN.Common.ProductBasicInfo": {
+      "description": "The basic information related to a product",
+      "type": "object",
+      "required": [
+        "productId",
+        "productSku",
+        "productTitle",
+        "productImageUrl",
+        "productExists"
+      ],
+      "properties": {
+        "productId": {
+          "format": "guid",
+          "type": "string",
+          "description": "The product identifier",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "productSku": {
+          "type": "string",
+          "description": "The product SKU",
+          "example": "SKU1234"
+        },
+        "productTitle": {
+          "type": "string",
+          "description": "The product tile",
+          "example": "My supert product"
+        },
+        "productImageUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "The product image Url",
+          "example": "http://i2.cdscdn.com/pdt2/3/9/0/1/550x550/hai6901018043390/rw/haier-b20fwrss-refrigerateur-americain.jpg"
+        },
+        "productExists": {
+          "type": "boolean",
+          "description": "Indicates if the product still exists in your catalog",
+          "example": true
+        }
+      }
+    },
+    "IMN.Common.ChannelBasicInfo": {
+      "description": "The basic info related to a channel",
+      "type": "object",
+      "required": [
+        "channelId",
+        "channelName",
+        "channelImageUrl"
+      ],
+      "properties": {
+        "channelId": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ChannelId"
+        },
+        "channelName": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ChannelName"
+        },
+        "channelImageUrl": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.HttpUrl"
+        }
+      }
+    },
+    "IMN.Common.CatalogColumnId": {
+      "type": "string",
+      "format": "guid",
+      "description": "The catalog column identifier (catalog or custom column)",
+      "example": "bea7c21e-948b-4ac3-9ffd-4396e62c4163"
+    },
+    "IMN.Common.CatalogColumnUserName": {
+      "type": "string",
+      "description": "The catalog column named by the user (catalog or custom column)",
+      "example": "My title"
+    },
+    "IMN.Common.ChannelColumnName": {
+      "type": "string",
+      "description": "The channel column name",
+      "example": "NAME"
+    },
+    "IMN.Common.ColumnImportance": {
+      "type": "string",
+      "description": "Importance of the column",
+      "enum": [
+        "Required",
+        "Recommended",
+        "Optional"
+      ],
+      "example": "Required",
+      "default": "Optional"
+    },
+    "IMN.Common.ColumnDataType": {
+      "description": "Data type of the column, will be used for parsing and for consolidation proces",
+      "enum": [
+        "String",
+        "Url",
+        "Text",
+        "Decimal",
+        "DateTime",
+        "Int",
+        "SpecialInt",
+        "InStock",
+        "Unknown",
+        "ImageUrl"
+      ],
+      "type": "string",
+      "default": "String",
+      "example": "String"
+    },
+    "IMN.Common.IMNColumnName": {
+      "type": "string",
+      "description": "The IMN column name",
+      "example": "CategoryFirstLevel"
+    },
+    "IMN.Common.marketplaceCode": {
+      "description": "The technical code of the marketplace.",
+      "type": "string",
+      "example": "Amazon",
+      "x-lov": "OMMarketplaceTechnicalCode"
+    },
+    "IMN.Common.MarketplaceAccountId": {
+      "description": "The marketplace account identifier in IMN. This account identifier is based on your api settings.",
+      "type": "integer",
+      "format": "int32",
+      "example": 1234
+    },
+    "IMN.Common.MarketplaceBusinessCode": {
+      "description": "In an marketplace technical code like CDiscount you can have several marketplaces like GO SPORT, etc. We identify them by a business code.",
+      "type": "string",
+      "example": "GOSPORT",
+      "x-lov": "MarketplaceBusinessCode"
+    },
+    "IMN.Common.CountryIsoCodeAlpha3": {
+      "description": "The country iso code alpha 3 <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3\">(ISO 3166-1_alpha-3)</a>",
+      "type": "string",
+      "x-lov": "Country",
+      "example": "FRA"
+    },
+    "IMN.Common.CurrencyCode": {
+      "description": "The currency code <a href=\"https://en.wikipedia.org/wiki/ISO_4217\">(ISO 4217)</a>\n",
+      "type": "string",
+      "example": "EUR"
+    },
+    "IMN.Common.Email": {
+      "description": "The email",
+      "type": "string",
+      "format": "email",
+      "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+      "example": "paulsimon@mysupercompany.com"
+    },
+    "IMN.Common.UserId": {
+      "format": "guid",
+      "description": "The user identifier",
+      "type": "string",
+      "example": "8a7fbdec-9e71-472e-9974-27d5c1d57cf8"
+    },
+    "IMN.Common.StoreId": {
+      "format": "guid",
+      "description": "The store identifier",
+      "type": "string",
+      "example": "64f43358-63a1-47f7-97ec-0301fc39956b"
+    },
+    "IMN.Common.ChannelCatalogId": {
+      "type": "string",
+      "format": "guid",
+      "description": "The channel catalog identifier",
+      "example": "6d6b04de-406b-4539-8e7e-bf3e8da5dfb0"
+    },
+    "IMN.Common.ChannelCategoryId": {
+      "type": "string",
+      "format": "guid",
+      "example": "24f508da-a069-4467-b9d3-15baebe9bac7"
+    },
+    "IMN.Common.ChannelCategoryPath": {
+      "description": "The channel category path",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "example": [
+        "Clothing",
+        "Women",
+        "Shoes"
+      ]
+    },
+    "IMN.Common.CatalogCategoryPath": {
+      "description": "The catalog category path",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "example": [
+        "VÃªtements",
+        "Femmes",
+        "Chaussures"
+      ]
+    },
+    "IMN.Common.CatalogCategoryId": {
+      "description": "The catalog category identifier",
+      "type": "string",
+      "format": "guid",
+      "example": "81a058a6-0451-4b79-84ef-94c58d0ed4ac"
+    },
+    "IMN.Common.ChannelId": {
+      "type": "string",
+      "format": "guid",
+      "description": "The channel identifier",
+      "example": "2dc136a7-0d3d-4cc9-a825-a28a42c53e28"
+    },
+    "IMN.Common.ChannelName": {
+      "type": "string",
+      "description": "The channel name",
+      "example": "Amazon FRA"
+    },
+    "IMN.Common.ProductId": {
+      "type": "string",
+      "format": "guid",
+      "description": "The product identifier",
+      "example": "578419df-1bbf-41a6-96fa-862e42182b67"
+    },
+    "IMN.Common.ChannelColumnId": {
+      "type": "string",
+      "format": "guid",
+      "description": "The channel column identifier",
+      "example": "8a76f06a-fefc-4c0d-bcfe-b210f1482977"
+    },
+    "IMN.Common.ListOfValueItem": {
+      "description": "This object is used by LOV apis",
+      "type": "object",
+      "required": [
+        "codeIdentifier",
+        "intIdentifier"
+      ],
+      "properties": {
+        "position": {
+          "format": "int32",
+          "type": "integer",
+          "example": 1
+        },
+        "codeIdentifier": {
+          "type": "string",
+          "example": "FRA"
+        },
+        "translationText": {
+          "type": "string",
+          "example": "France"
+        },
+        "intIdentifier": {
+          "format": "int32",
+          "type": "integer",
+          "example": 1
+        }
+      }
+    },
+    "IMN.Common.PaginationResult": {
+      "type": "object",
+      "required": [
+        "entryCount",
+        "pageCount",
+        "totalEntryCount",
+        "links"
+      ],
+      "properties": {
+        "entryCount": {
+          "type": "integer",
+          "description": "The entry count currently returned",
+          "example": 25,
+          "minimum": 0
+        },
+        "pageCount": {
+          "type": "integer",
+          "description": "The page count",
+          "example": 38,
+          "minimum": 0
+        },
+        "totalEntryCount": {
+          "type": "integer",
+          "description": "The total entry count",
+          "example": 943,
+          "minimum": 0
+        },
+        "links": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.PaginationResultLinks"
+        }
+      },
+      "example": {
+        "entryCount": 25,
+        "pageCount": 38,
+        "totalEntryCount": 943,
+        "links": {
+          "first": {
+            "href": "/v2/user/marketplaces/orders/list/full",
+            "method": "POST",
+            "parameters": [
+              {
+                "name": "request",
+                "in": "body",
+                "type": "object",
+                "schema": "orderListRequest",
+                "value": {
+                  "beginPeriodUtcDate": "2014-08-25T07:32:31.584Z",
+                  "endPeriodUtcDate": "2014-09-24T07:32:31.584Z",
+                  "pageSize": 25,
+                  "pageNumber": 1
+                }
+              }
+            ]
+          },
+          "last": {
+            "href": "/v2/user/marketplaces/orders/list/full",
+            "method": "POST",
+            "parameters": [
+              {
+                "name": "request",
+                "in": "body",
+                "type": "object",
+                "schema": "orderListRequest",
+                "value": {
+                  "beginPeriodUtcDate": "2014-08-25T07:32:31.584Z",
+                  "endPeriodUtcDate": "2014-09-24T07:32:31.584Z",
+                  "pageSize": 25,
+                  "pageNumber": 38
+                }
+              }
+            ]
+          },
+          "next": {
+            "href": "/v2/user/marketplaces/orders/list/full",
+            "method": "POST",
+            "parameters": [
+              {
+                "name": "request",
+                "in": "body",
+                "type": "object",
+                "schema": "orderListRequest",
+                "value": {
+                  "beginPeriodUtcDate": "2014-08-25T07:32:31.584Z",
+                  "endPeriodUtcDate": "2014-09-24T07:32:31.584Z",
+                  "pageSize": 25,
+                  "pageNumber": 2
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "IMN.Common.PaginationResultLinks": {
+      "description": "The navigation links 'first', 'last', 'next', 'previous'",
+      "type": "object",
+      "required": [
+        "first",
+        "last"
+      ],
+      "properties": {
+        "first": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        "last": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        "previous": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        },
+        "next": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Link3"
+        }
+      }
+    },
+    "IMN.Common.Href": {
+      "type": "string",
+      "example": "/v1/user/orders/{marketplaceCode}/{IMNOrderId}",
+      "description": "Indicate the relative uri for this link"
+    },
+    "IMN.Common.OperationId": {
+      "type": "string",
+      "description": "The operationId to call.",
+      "example": "GetOrder"
+    },
+    "IMN.Common.HttpMethod": {
+      "type": "string",
+      "enum": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE",
+        "PUT",
+        "HEAD"
+      ],
+      "default": "GET",
+      "example": "GET",
+      "description": "Indicate the http method to use on this link"
+    },
+    "IMN.Common.Link3": {
+      "type": "object",
+      "required": [
+        "href"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "The label corresponding to the link. This label is automatically translated based on the Accept-Language http header.",
+          "example": "The translated label"
+        },
+        "docUrl": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.DocUrl"
+        },
+        "description": {
+          "type": "string",
+          "description": "The description of the link",
+          "example": "This is a description link"
+        },
+        "href": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Href"
+        },
+        "operationId": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.OperationId"
+        },
+        "method": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.HttpMethod"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LinkParameter3"
+          }
+        },
+        "urlTemplated": {
+          "type": "boolean",
+          "description": "indicates whether the href is templated or not"
+        },
+        "allRequiredParamsProvided": {
+          "type": "boolean",
+          "description": "indicates whether all required params have been provided"
+        },
+        "allOptionalParamsProvided": {
+          "type": "boolean",
+          "description": "indicates whether all optionals params have been provided"
+        },
+        "info": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.InfoSummaries"
+        }
+      }
+    },
+    "IMN.Common.Link2": {
+      "type": "object",
+      "x-deprecated": true,
+      "required": [
+        "rel"
+      ],
+      "properties": {
+        "rel": {
+          "type": "string",
+          "description": "Indicate the relation name related to the link",
+          "example": "self"
+        },
+        "href": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.Href"
+        },
+        "operationId": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.OperationId"
+        },
+        "method": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.HttpMethod"
+        },
+        "parameters": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 0,
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LinkParameter2"
+          }
+        },
+        "info": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.InfoSummaries"
+        }
+      }
+    },
+    "IMN.Common.ParameterIn": {
+      "type": "string",
+      "description": "* path: if the parameter must be pass in the path uri\n* header: if the parameter must be passed in http header\n* query: if the parameter must be passed in querystring\n* body: if the parameter must be passed in the body\n* file: if the parameter must be passed in a multipart/form-data (https://swagger.io/docs/specification/2-0/file-upload/)\n",
+      "example": "path",
+      "enum": [
+        "path",
+        "header",
+        "query",
+        "body",
+        "file"
+      ]
+    },
+    "IMN.Common.ParameterType": {
+      "description": "The value type of the parameter",
+      "type": "string",
+      "enum": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "date",
+        "date-time",
+        "file"
+      ],
+      "default": "string",
+      "example": "string"
+    },
+    "IMN.Common.LinkParameter3": {
+      "type": "object",
+      "required": [
+        "in"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "The label corresponding to the link parameter. This label is automatically translated based on the Accept-Language http header.",
+          "example": "The translated label"
+        },
+        "value": {
+          "type": "object",
+          "description": "The value of the parameter. It can be an integer a string or an object.",
+          "example": "1234"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "example": true
+        },
+        "in": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ParameterIn"
+        },
+        "type": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ParameterType"
+        },
+        "lovLink": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        },
+        "lovRequired": {
+          "type": "boolean",
+          "description": "If true, you MUST indicate a value from the list of values otherwise it's a freetext",
+          "example": true
+        },
+        "description": {
+          "type": "string",
+          "description": "description of the parameter",
+          "example": "the store identifier"
+        },
+        "schema": {
+          "type": "string",
+          "description": "schema of the parameter",
+          "example": "orderListRequest"
+        },
+        "pattern": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ValidationPattern"
+        },
+        "properties": {
+          "description": "If the parameter is an object with flexible properties (additionProperties/dictionary), we will describe the properties of the object.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LinkParameterProperty3"
+          },
+          "example": {
+            "shipOrder": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "IMN.Common.ValidationPattern": {
+      "type": "string",
+      "description": "The regular expression to validate the value",
+      "example": "*.-api$"
+    },
+    "IMN.Common.LinkParameterProperty3": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "The label corresponding to the link parameter property. This label is automatically translated based on the Accept-Language http header.",
+          "example": "The translated label"
+        },
+        "value": {
+          "type": "object",
+          "description": "The value of the parameter. It can be an integer a string or an object.",
+          "example": "1234"
+        },
+        "required": {
+          "type": "boolean",
+          "example": true
+        },
+        "type": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ParameterType"
+        },
+        "lovLink": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink3"
+        },
+        "lovRequired": {
+          "type": "boolean",
+          "description": "If true, you MUST use indicate a value from the list of values otherwise it's a freetext",
+          "example": true
+        },
+        "description": {
+          "type": "string",
+          "description": "description of the parameter",
+          "example": "the store identifier"
+        },
+        "schema": {
+          "type": "string",
+          "description": "schema of the parameter",
+          "example": "orderListRequest"
+        },
+        "pattern": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ValidationPattern"
+        }
+      }
+    },
+    "IMN.Common.LinkParameter2": {
+      "type": "object",
+      "x-deprecated": true,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the parameter",
+          "example": "marketplaceCode"
+        },
+        "value": {
+          "type": "string",
+          "description": "The value of the parameter",
+          "example": "1234"
+        },
+        "required": {
+          "type": "boolean",
+          "example": true
+        },
+        "in": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ParameterIn"
+        },
+        "type": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ParameterType"
+        },
+        "lovLink": {
+          "description": "This parameter expect the values indicated in this list of values.",
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.LOVLink2"
+        },
+        "lovRequired": {
+          "type": "boolean",
+          "description": "If true, you MUST use indicate a value from the list of values otherwise it's a freetext",
+          "example": true
+        }
+      }
+    },
+    "IMN.Common.LOVLink2": {
+      "description": "Describe the way you have to follow to get access to the LOV",
+      "x-deprecated": true,
+      "type": "object",
+      "required": [
+        "listName"
+      ],
+      "properties": {
+        "rel": {
+          "type": "string",
+          "description": "Indicate the relation name related to the link",
+          "example": "LOV_Go2CultureName"
+        },
+        "href": {
+          "type": "string",
+          "default": "/v2/user/{listName}",
+          "example": "/v2/public/{listName}",
+          "description": "Indicate the relative uri pattern to the list of value"
+        },
+        "listName": {
+          "type": "string",
+          "description": "The name of the list of value",
+          "example": "Go2CultureName"
+        }
+      }
+    },
+    "IMN.Common.LOVLink3": {
+      "description": "Describe the way you have to follow to get access to the LOV",
+      "type": "object",
+      "required": [
+        "href"
+      ],
+      "properties": {
+        "href": {
+          "type": "string",
+          "format": "uri",
+          "example": "/v2/public/Go2CultureName",
+          "description": "Indicate the uri to the list of value"
+        },
+        "method": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.HttpMethod"
+        }
+      }
+    },
+    "IMN.Common.HttpUrl": {
+      "description": "The URL <a href=\"https://en.wikipedia.org/wiki/URL\">https://en.wikipedia.org/wiki/URL</a>",
+      "type": "string",
+      "pattern": "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$",
+      "example": "http://www.mydomain.com"
+    },
+    "IMN.Common.ErrorResponseMessage": {
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.UserErrorMessage"
+          }
+        }
+      }
+    },
+    "IMN.Common.DocUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "The documentation related to this operation.",
+      "example": "https://api-docs.imn.io/#operation/EnableChannelCatalog"
+    },
+    "IMN.Common.UserErrorMessage": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "docUrl": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.DocUrl"
+        },
+        "code": {
+          "type": "string",
+          "description": "the error code. The error code can be a pattern containing the argument's name",
+          "example": "CatalogImportationAlreadyInProgress(ExecutionId currentCatalogImportationId)"
+        },
+        "message": {
+          "type": "string",
+          "description": "The error message",
+          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
+        },
+        "cultureName": {
+          "type": "string",
+          "description": "If the error is translated, the culture name will be indicated",
+          "example": "en",
+          "x-lov": "Go2CultureName"
+        },
+        "arguments": {
+          "type": "array",
+          "description": "a dictionary string/object",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The key of the parameter",
+                "example": "currentCatalogImportationId"
+              },
+              "value": {
+                "type": "object",
+                "description": "The value of the parameter. Depending to the type.",
+                "example": "b24d0dd8-a561-478a-9b26-34f573f03527"
+              }
+            }
+          }
+        }
+      }
+    },
+    "IMN.Common.InfoSummaries": {
+      "type": "object",
+      "properties": {
+        "successes": {
+          "type": "array",
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.SuccessSummary"
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ErrorSummary"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.WarningSummary"
+          }
+        },
+        "informations": {
+          "type": "array",
+          "items": {
+            "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.InfoSummary"
+          }
+        }
+      }
+    },
+    "IMN.Common.SuccessSummary": {
+      "type": "object",
+      "properties": {
+        "successCode": {
+          "type": "string"
+        },
+        "successMessage": {
+          "type": "string"
+        },
+        "successArguments": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "propertyName": {
+          "type": "string"
+        },
+        "propertyValue": {
+          "type": "string"
+        },
+        "objectName": {
+          "type": "string"
+        }
+      }
+    },
+    "IMN.Common.ErrorSummary": {
+      "type": "object",
+      "properties": {
+        "utcDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "errorGuid": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        },
+        "technicalErrorMessage": {
+          "type": "string"
+        },
+        "exceptionDetail": {
+          "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ExceptionDetail"
+        },
+        "errorArguments": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "propertyName": {
+          "type": "string"
+        },
+        "propertyValue": {
+          "type": "string"
+        },
+        "objectName": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "IMN.Common.WarningSummary": {
+      "type": "object",
+      "properties": {
+        "technicalErrorMessage": {
+          "type": "string"
+        },
+        "warningMessage": {
+          "type": "string"
+        },
+        "warningCode": {
+          "type": "string"
+        },
+        "warningArguments": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "IMN.Common.InfoSummary": {
+      "type": "object",
+      "properties": {
+        "informationCode": {
+          "type": "string"
+        },
+        "informationMessage": {
+          "type": "string"
+        },
+        "informationArguments": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "propertyName": {
+          "type": "string"
+        },
+        "propertyValue": {
+          "type": "string"
+        },
+        "objectName": {
+          "type": "string"
+        }
+      }
+    },
+    "IMN.Common.ExceptionDetail": {
+      "type": "object",
+      "properties": {
+        "helpLink": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "stackTrace": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "IMN.Common.MarketplaceApiCredential": {
+      "description": "The API credentials of the merchant on his marketplace.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find the documentation for IMN's API here",
+    "url": "https://api-docs.imn.io/"
+  },
+  "x-tagGroups": [
+    {
+      "name": "Merchant API - User - Marketplaces",
+      "tags": [
+        "Merchant API - User - Marketplaces - Global",
+        "Merchant API - User - Marketplaces - Marketplace",
+        "Merchant API - User - Marketplaces - Api Credentials",
+        "Merchant API - User - Marketplaces - Transport Settings",
+        "Merchant API - User - Marketplaces - Pricing Settings",
+        "Merchant API - User - Marketplaces - Activation"
+      ]
+    },
+    {
+      "name": "Merchant API - Public - Security",
+      "tags": [
+        "Merchant API - Public - Security - Global",
+        "Merchant API - Public - Security - Security"
+      ]
+    },
+    {
+      "name": "Merchant API - Public - List of Values",
+      "tags": [
+        "Merchant API - Public - List of Values - LOV"
+      ]
+    },
+    {
+      "name": "Merchant API - User - List of Values",
+      "tags": [
+        "Merchant API - User - List of Values - LOV"
+      ]
+    },
+    {
+      "name": "Merchant API - User - Wallet",
+      "tags": [
+        "Merchant API - User - Wallet - Global",
+        "Merchant API - User - Wallet - Wallet"
+      ]
+    }
+  ],
+  "parameters": {
+    "walletPropertyCodeParameter": {
+      "name": "walletPropertyCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The wallet document code"
+    },
+    "storeIdOnlyGeneralParameters": {
+      "name": "storeId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "guid",
+      "description": "Your store identifier"
+    },
+    "pageNumberQueryStringParameter": {
+      "name": "pageNumber",
+      "description": "The page number you want to get",
+      "in": "query",
+      "required": true,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "x-example": 1
+    },
+    "pageSizeQueryStringParameter": {
+      "name": "pageSize",
+      "description": "The entry count you want to get",
+      "in": "query",
+      "required": true,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 25,
+      "maximum": 100,
+      "x-example": 25
+    },
+    "ifNoneMatchParameter": {
+      "name": "If-None-Match",
+      "type": "string",
+      "in": "header",
+      "required": false,
+      "description": "ETag value to identify the last known version of requested resource.\\\nTo avoid useless exchange, we recommend you to indicate the ETag you previously got from this operation.\\\nIf the ETag value does not match the response will be 200 to give you a new content, otherwise the response will be: 304 Not Modified, without any content.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+    },
+    "ifMatchParameter": {
+      "name": "If-Match",
+      "in": "header",
+      "type": "string",
+      "required": true,
+      "description": "ETag value to identify the last known version of requested resource.\\\nTo ensure that you are making a change on the lastest version of the resource.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+    },
+    "acceptLanguageParameter": {
+      "name": "Accept-Language",
+      "description": "Indicates that the client accepts the following languages.",
+      "in": "header",
+      "required": false,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptEncodingRequiredParameter": {
+      "name": "Accept-Encoding",
+      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
+      "in": "header",
+      "required": true,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptEncodingOptionalParameter": {
+      "name": "Accept-Encoding",
+      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
+      "in": "header",
+      "required": false,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "marketplaceCodeParameter": {
+      "name": "marketplaceCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The marketplace code"
+    },
+    "merchantCodeParameter": {
+      "name": "merchantCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The merchant code"
+    }
+  },
+  "responses": {
+    "GeneralError": {
+      "description": "Occurs when something goes wrong",
+      "schema": {
+        "$ref": "https://api.swaggerhub.com/domains/IMN/imn.io/v1#/definitions/IMN.Common.ErrorResponseMessage"
+      }
+    },
+    "304_NotModified": {
+      "description": "The ETag sent in the http header If-None-Match did not change. So you are up to date !",
+      "headers": {
+        "Last-Modified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last modification UTC date of the resource\\\nFor more details go to this link: https://tools.ietf.org/html/rfc7232#section-2.2\n"
+        },
+        "ETag": {
+          "type": "string",
+          "description": "ETag value to identify the current version of the resource\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+        }
+      }
+    },
+    "412_PreConditionFailed": {
+      "description": "The ETag sent in the http header If-Match did not match with the current version. Please refresh the information related to this resource.",
+      "headers": {
+        "ETag": {
+          "type": "string",
+          "description": "The ETag value to identify the resource.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+        }
+      }
+    }
+  }
+}
