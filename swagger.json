@@ -24,7 +24,7 @@
     "apiName": "MerchantMarketplacesV1",
     "namespace": "IMN.MER.MKP.WebService",
     "useBeezUPFrameworkVersion2": true,
-    "comment": "No change. Just server side generation. \nIntegration to VSO for docgen\nRepublish as an edit occurred in the Overview header\nClient generation test\n",
+    "comment": "No change. Just server side generation. \nIntegration to VSO for docgen\nRepublish as an edit occurred in the Overview header\nClient generation test 2\n",
     "using": [
       "IMN.Schemas",
       "IMN.MER.Schemas",
