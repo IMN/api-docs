@@ -17,6 +17,7 @@
     }
   },
   "host": "api.imn.io",
+  "basePath": "/merchant/marketplaces/v1",
   "x-IMN-api-ops": {
     "codeGenType": "webapi",
     "repo": "IMN",
