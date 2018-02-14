@@ -563,7 +563,7 @@
         }
       }
     },
-    "/merchant/account/": {
+    "/merchant/account/v1/": {
       "get": {
         "tags": [
           "Merchant - Account API - Global"
@@ -583,7 +583,7 @@
         }
       }
     },
-    "/merchant/account/checkMerchantCodeAvailability": {
+    "/merchant/account/v1/checkMerchantCodeAvailability": {
       "post": {
         "tags": [
           "Merchant - Account API - Global"
@@ -616,7 +616,7 @@
         }
       }
     },
-    "/merchant/account/create": {
+    "/merchant/account/v1/create": {
       "post": {
         "tags": [
           "Merchant - Account API - Global"
@@ -652,7 +652,7 @@
         }
       }
     },
-    "/merchant/account/{merchantCode}": {
+    "/merchant/account/v1/{merchantCode}": {
       "get": {
         "tags": [
           "Merchant - Account API - Account"
