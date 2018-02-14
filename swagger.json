@@ -17,7 +17,6 @@
     }
   },
   "host": "api.imn.io",
-  "basePath": "/merchant/marketplaces/v1",
   "x-IMN-api-ops": {
     "codeGenType": "webapi",
     "repo": "IMN",
@@ -77,7 +76,7 @@
     }
   ],
   "paths": {
-    "/{merchantCode}": {
+    "/merchant/marketplaces/v1/{merchantCode}": {
       "get": {
         "tags": [
           "Merchant API - Marketplaces - Global"
@@ -102,7 +101,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}": {
       "get": {
         "tags": [
           "Merchant API - Marketplaces - Marketplace"
@@ -133,7 +132,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/subscription/reporting": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/subscription/reporting": {
       "get": {
         "tags": [
           "Merchant API - Marketplaces - Marketplace"
@@ -164,7 +163,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/apiCredential": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/apiCredential": {
       "get": {
         "tags": [
           "Merchant API - Marketplaces - Api Credentials"
@@ -235,7 +234,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/shippingSettings": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/shippingSettings": {
       "get": {
         "tags": [
           "Merchant API - Marketplaces - Shipping Settings"
@@ -300,7 +299,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/pricingSetting": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/pricingSetting": {
       "get": {
         "tags": [
           "Merchant API - Marketplaces - Pricing Settings"
@@ -368,7 +367,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/declareOffersSource": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/declareOffersSource": {
       "post": {
         "tags": [
           "Merchant API - Marketplaces - Activation"
@@ -399,7 +398,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/undeclareOffersSource": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/undeclareOffersSource": {
       "post": {
         "tags": [
           "Merchant API - Marketplaces - Activation"
@@ -433,7 +432,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/enable": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/enable": {
       "post": {
         "tags": [
           "Merchant API - Marketplaces - Activation"
@@ -467,7 +466,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/disable": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/disable": {
       "post": {
         "tags": [
           "Merchant API - Marketplaces - Activation"
@@ -498,7 +497,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/disableOrderImportation": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/disableOrderImportation": {
       "post": {
         "tags": [
           "Merchant API - Marketplaces - Activation"
@@ -529,7 +528,7 @@
         }
       }
     },
-    "/{merchantCode}/{marketplaceCode}/reenableOrderImportation": {
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/reenableOrderImportation": {
       "post": {
         "tags": [
           "Merchant API - Marketplaces - Activation"
