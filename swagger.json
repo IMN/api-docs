@@ -719,7 +719,7 @@
         }
       }
     },
-    "/": {
+    "/merchant/lov/v1/": {
       "get": {
         "summary": "Get all list names",
         "operationId": "GetUserLovIndex",
@@ -770,7 +770,7 @@
         }
       }
     },
-    "/{listName}": {
+    "/merchant/lov/v1/{listName}": {
       "get": {
         "tags": [
           "Merchant API - List of Values - LOV"
