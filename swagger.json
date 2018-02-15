@@ -1089,7 +1089,6 @@
       "type": "object",
       "properties": {
         "links": {
-          "type": "string",
           "$ref": "#/definitions/merchantAccountIndexLinks"
         }
       }
