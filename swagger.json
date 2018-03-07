@@ -1592,6 +1592,15 @@
       ],
       "example": "marketplace"
     },
+    "marketplaceOfferPublicationStatus": {
+      "description": "The Offer Importation status",
+      "type": "string",
+      "enum": [
+        "enabled",
+        "disabled"
+      ],
+      "example": "enabled"
+    },
     "merchantCode": {
       "type": "string",
       "description": "The merchant code identifier in IMN",
