@@ -1512,6 +1512,10 @@
       "type": "object",
       "required": [
         "code",
+        "name",
+        "sellerBackOfficeUrl",
+        "sellerBackOfficeCredentialPageUrl",
+        "imageUrl",
         "subscriptionStatus",
         "credentialStatus",
         "shippingSettingsStatus",
@@ -1520,6 +1524,17 @@
       "properties": {
         "code": {
           "$ref": "#/definitions/marketplaceCode"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the marketplace",
+          "example": "Cdiscount"
+        },
+        "sellerBackOfficeUrl": {
+          "$ref": "#/definitions/httpUrl"
+        },
+        "sellerBackOfficeCredentialPageUrl": {
+          "$ref": "#/definitions/httpUrl"
         },
         "imageUrl": {
           "$ref": "#/definitions/httpUrl"
