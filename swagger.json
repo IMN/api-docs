@@ -75,6 +75,10 @@
       "x-displayName": "Account"
     },
     {
+      "name": "Merchant - Account API - Api Token",
+      "x-displayName": "Api Token"
+    },
+    {
       "name": "Marketplaces - Orders - Global",
       "description": "All global operations (cross marketplace)",
       "x-displayName": "Global"
@@ -610,6 +614,12 @@
               "$ref": "#/definitions/merchantAccountIndex"
             }
           },
+          "401": {
+            "description": "The merchant informations are not available",
+            "schema": {
+              "$ref": "#/definitions/userErrorMessage"
+            }
+          },
           "default": {
             "$ref": "#/responses/GeneralError"
           }
@@ -738,6 +748,31 @@
           },
           "400": {
             "$ref": "#/responses/invalidMerchantCode"
+          },
+          "404": {
+            "$ref": "#/responses/merchantNotFound"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/account/v1/{merchantCode}/resetApiToken": {
+      "post": {
+        "tags": [
+          "Merchant - Account API - Api Token"
+        ],
+        "summary": "Reset merchant api token",
+        "operationId": "ResetMerchantApiToken",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Merchant api token reset"
           },
           "404": {
             "$ref": "#/responses/merchantNotFound"
@@ -1954,6 +1989,7 @@
     },
     "merchantAccountIndexLinks": {
       "type": "object",
+      "description": "The action you can do on the account API\nThe create and checkMerchantCode link will be available when the merchant code is not created\nThe account link will be available when the merchant has be created  \n",
       "properties": {
         "create": {
           "$ref": "#/definitions/links.CreateMerchantAccountLink"
@@ -1963,17 +1999,20 @@
         },
         "accountInfo": {
           "$ref": "#/definitions/links.GetMerchantAccountInfoLink"
-        },
-        "update": {
-          "$ref": "#/definitions/links.UpdateMerchantAcountInfoLink"
         }
       }
     },
     "merchantAccountIndex": {
       "type": "object",
+      "required": [
+        "links"
+      ],
       "properties": {
         "links": {
           "$ref": "#/definitions/merchantAccountIndexLinks"
+        },
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
         }
       }
     },
@@ -1981,7 +2020,6 @@
       "type": "object",
       "required": [
         "code",
-        "email",
         "firstName",
         "lastName",
         "country",
@@ -1992,14 +2030,13 @@
         "code": {
           "$ref": "#/definitions/merchantCode"
         },
-        "email": {
-          "$ref": "#/definitions/email"
-        },
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "example": "Marilyn"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "example": "MONROE"
         },
         "country": {
           "$ref": "#/definitions/countryIsoCodeAlpha3"
@@ -2011,7 +2048,8 @@
           "$ref": "#/definitions/httpUrl"
         },
         "phoneNumber": {
-          "type": "string"
+          "type": "string",
+          "example": 663963036.0
         }
       }
     },
@@ -2022,15 +2060,16 @@
         "lastName",
         "country",
         "companyName",
-        "email",
         "phoneNumber"
       ],
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "example": "Marilyn"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "example": "MONROE"
         },
         "country": {
           "$ref": "#/definitions/countryIsoCodeAlpha3"
@@ -2038,11 +2077,9 @@
         "companyName": {
           "$ref": "#/definitions/merchantCompanyName"
         },
-        "email": {
-          "$ref": "#/definitions/email"
-        },
         "phoneNumber": {
-          "type": "string"
+          "type": "string",
+          "example": 663963036.0
         },
         "imageUrl": {
           "$ref": "#/definitions/httpUrl"
@@ -2052,22 +2089,30 @@
     "merchantAccountInfo": {
       "type": "object",
       "required": [
+        "merchantCode",
         "email",
         "firstName",
         "lastName",
         "country",
         "companyName",
-        "phoneNumber"
+        "phoneNumber",
+        "apiToken",
+        "links"
       ],
       "properties": {
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
         "email": {
           "$ref": "#/definitions/email"
         },
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "example": "Marilyn"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "example": "MONROE"
         },
         "country": {
           "$ref": "#/definitions/countryIsoCodeAlpha3"
@@ -2076,7 +2121,42 @@
           "$ref": "#/definitions/merchantCompanyName"
         },
         "phoneNumber": {
-          "type": "string"
+          "type": "string",
+          "example": 663963036.0
+        },
+        "imageUrl": {
+          "$ref": "#/definitions/httpUrl"
+        },
+        "apiToken": {
+          "type": "string",
+          "description": "The api token that you will have to use to connect to our API",
+          "example": "2b1ff3a068054433ac09224bbb1ff3a068054433ac09224bb0c9d7ea=="
+        },
+        "links": {
+          "$ref": "#/definitions/merchantAccountInfoLinks"
+        }
+      }
+    },
+    "merchantAccountInfoLinks": {
+      "type": "object",
+      "description": "The action you can do on a merchant.\nThe external link will be avaible if there is no subscription requested \n",
+      "required": [
+        "self",
+        "update",
+        "resetApiToken"
+      ],
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/links.GetMerchantAccountInfoLink"
+        },
+        "update": {
+          "$ref": "#/definitions/links.UpdateMerchantAcountInfoLink"
+        },
+        "resetApiToken": {
+          "$ref": "#/definitions/links.ResetMerchantApiTokenLink"
+        },
+        "externalMarketplaceSubscription": {
+          "$ref": "#/definitions/links.ExternalMarketplaceSubscriptionFormLink"
         }
       }
     },
@@ -2116,8 +2196,22 @@
         {
           "type": "object",
           "example": {
-            "href": "/merchant/account/v1/accountInfo",
+            "href": "/merchant/account/v1/MLT01",
             "method": "GET"
+          }
+        }
+      ]
+    },
+    "links.ResetMerchantApiTokenLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/merchant/account/v1/MLT01/resetApiToken",
+            "method": "POST"
           }
         }
       ]
@@ -2130,8 +2224,23 @@
         {
           "type": "object",
           "example": {
-            "href": "/merchant/account/v1/update",
-            "method": "POST"
+            "href": "/merchant/account/v1/MLT01",
+            "method": "PATCH"
+          }
+        }
+      ]
+    },
+    "links.ExternalMarketplaceSubscriptionFormLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "type": "object",
+          "description": "The link to sales force form to easily subscribe to the marketplaces\nThe query string will be indicated by the server: \n- email: the email of the merchant\n- merchantCode: The merchant code \n- hmac: Computed by the server with a shared secret key\n",
+          "example": {
+            "href": "https://imn-developer-edition.eu9.force.com/?email=myemail@mydomain.com&merchantCode=MLT01&hmac=M2JiMmFkY2QwMTY1MjhkM2Y3ZGFmMGZlNjE5ODk1ZDE5NDVjMWQzZGRmNjMyNzkyYzVlMTZmZDQ1YmM1M2ZlOA==#general",
+            "method": "GET"
           }
         }
       ]
@@ -5452,7 +5561,8 @@
       "name": "Merchant - Account API",
       "tags": [
         "Merchant - Account API - Global",
-        "Merchant - Account API - Account"
+        "Merchant - Account API - Account",
+        "Merchant - Account API - Api Token"
       ]
     },
     {
