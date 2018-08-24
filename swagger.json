@@ -773,7 +773,35 @@
         }
       }
     },
-    "/merchant/account/v1/{merchantCode}/resetApiToken": {
+    "/merchant/account/v1/{merchantCode}/apiToken": {
+      "get": {
+        "tags": [
+          "Merchant - Account API - Api Token"
+        ],
+        "summary": "Get merchant api token",
+        "operationId": "GetMerchantApiToken",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The merchant api token",
+            "schema": {
+              "$ref": "#/definitions/apiToken"
+            }
+          },
+          "404": {
+            "$ref": "#/responses/merchantNotFound"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/account/v1/{merchantCode}/apiToken/reset": {
       "post": {
         "tags": [
           "Merchant - Account API - Api Token"
@@ -2048,7 +2076,7 @@
     },
     "merchantAccountIndexLinks": {
       "type": "object",
-      "description": "The action you can do on the account API\nThe create and checkMerchantCode link will be available when the merchant code is not created\nThe account link will be available when the merchant has be created  \n",
+      "description": "The action you can do on the account API\nThe create and checkMerchantCode link will be available when the merchant code is not created\nThe account link will be available when the merchant has be created\n",
       "properties": {
         "create": {
           "$ref": "#/definitions/links.CreateMerchantAccountLink"
@@ -2161,6 +2189,11 @@
         }
       }
     },
+    "apiToken": {
+      "type": "string",
+      "description": "The api token that you will have to use to connect to our API",
+      "example": "2b1ff3a068054433ac09224bbb1ff3a068054433ac09224bb0c9d7ea=="
+    },
     "merchantAccountInfo": {
       "type": "object",
       "required": [
@@ -2171,7 +2204,6 @@
         "country",
         "companyName",
         "phoneNumber",
-        "apiToken",
         "currencyCode",
         "links"
       ],
@@ -2206,18 +2238,14 @@
         "currencyCode": {
           "$ref": "#/definitions/currencyCode"
         },
-        "apiToken": {
-          "type": "string",
-          "description": "The api token that you will have to use to connect to our API",
-          "example": "2b1ff3a068054433ac09224bbb1ff3a068054433ac09224bb0c9d7ea=="
-        },
         "ecommerceSoftwareName": {
           "$ref": "#/definitions/ecommerceSoftwareName"
         },
         "importedOfferCount": {
           "type": "integer",
           "format": "int32",
-          "description": "Imported offer count from the source marketplace or from his shop system source"
+          "description": "Imported offer count from the source marketplace or from his shop system source",
+          "example": 4242
         },
         "links": {
           "$ref": "#/definitions/merchantAccountInfoLinks"
@@ -2226,7 +2254,7 @@
     },
     "merchantAccountInfoLinks": {
       "type": "object",
-      "description": "The action you can do on a merchant.\nThe external link will be avaible if there is no subscription requested \n",
+      "description": "The action you can do on a merchant.\nThe external link will be avaible if there is no subscription requested\n",
       "required": [
         "self",
         "update",
@@ -2238,6 +2266,9 @@
         },
         "update": {
           "$ref": "#/definitions/links.UpdateMerchantAcountInfoLink"
+        },
+        "getApiToken": {
+          "$ref": "#/definitions/links.GetMerchantApiTokenLink"
         },
         "resetApiToken": {
           "$ref": "#/definitions/links.ResetMerchantApiTokenLink"
@@ -2289,6 +2320,20 @@
         }
       ]
     },
+    "links.GetMerchantApiTokenLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/merchant/account/v1/MLT01/apiToken",
+            "method": "GET"
+          }
+        }
+      ]
+    },
     "links.ResetMerchantApiTokenLink": {
       "allOf": [
         {
@@ -2297,7 +2342,7 @@
         {
           "type": "object",
           "example": {
-            "href": "/merchant/account/v1/MLT01/resetApiToken",
+            "href": "/merchant/account/v1/MLT01/apiToken/reset",
             "method": "POST"
           }
         }
@@ -2324,7 +2369,7 @@
         },
         {
           "type": "object",
-          "description": "The link to sales force form to easily subscribe to the marketplaces\nThe query string will be indicated by the server: \n- email: the email of the merchant\n- merchantCode: The merchant code \n- hmac: Computed by the server with a shared secret key\n",
+          "description": "The link to sales force form to easily subscribe to the marketplaces\nThe query string will be indicated by the server:\n- email: the email of the merchant\n- merchantCode: The merchant code\n- hmac: Computed by the server with a shared secret key\n",
           "example": {
             "href": "https://imn-developer-edition.eu9.force.com/?email=myemail@mydomain.com&merchantCode=MLT01&hmac=M2JiMmFkY2QwMTY1MjhkM2Y3ZGFmMGZlNjE5ODk1ZDE5NDVjMWQzZGRmNjMyNzkyYzVlMTZmZDQ1YmM1M2ZlOA==#general",
             "method": "GET"
