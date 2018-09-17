@@ -88,29 +88,34 @@
       "x-displayName": "Api Token"
     },
     {
-      "name": "Marketplaces - Orders - Global",
+      "name": "Merchant - Orders - Global",
       "description": "All global operations (cross marketplace)",
       "x-displayName": "Global"
     },
     {
-      "name": "Marketplaces - Orders - List",
+      "name": "Merchant - Orders - List",
       "description": "All Order list operations",
       "x-displayName": "List"
     },
     {
-      "name": "Marketplaces - Orders - Order",
+      "name": "Merchant - Orders - Order",
       "description": "All operations related to a single Order",
       "x-displayName": "Order"
     },
     {
-      "name": "Marketplaces - Orders - Batches",
+      "name": "Merchant - Orders - Batches",
       "description": "All batch operations on Orders to reduce call rate",
       "x-displayName": "Batches"
     },
     {
-      "name": "Marketplaces - Orders - Subscriptions",
-      "description": "All orders subscription operations",
-      "x-displayName": "Subscriptions"
+      "name": "Merchant - Orders - Subscriptions - DRAFT",
+      "description": "All orders subscription operations - DRAFT",
+      "x-displayName": "Subscriptions - DRAFT"
+    },
+    {
+      "name": "Merchant - Orders - Statistics",
+      "description": "The statistics of your orders",
+      "x-displayName": "Statistics"
     },
     {
       "name": "Merchant API - Offers - Global",
@@ -829,10 +834,10 @@
     "/merchant/orders/v1/{merchantCode}": {
       "get": {
         "tags": [
-          "Marketplaces - Orders - Global"
+          "Merchant - Orders - Global"
         ],
-        "x-tagGroups": "Martketplaces Orders",
-        "operationId": "GetOrderIndex",
+        "x-tagGroups": "Marketplaces Orders",
+        "operationId": "GetOrderApiIndex",
         "summary": "Get all actions you can do on the order API",
         "parameters": [
           {
@@ -844,9 +849,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Order index",
+            "description": "Order API index",
             "schema": {
-              "$ref": "#/definitions/orderIndex"
+              "$ref": "#/definitions/orderApiIndex"
             }
           },
           "304": {
@@ -859,10 +864,10 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/list/full": {
+    "/merchant/orders/v1/{merchantCode}/list": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - List"
+          "Merchant - Orders - List"
         ],
         "operationId": "GetOrderListFull",
         "summary": "Get a paginated list of all Orders with all Order and Order Item(s) properties",
@@ -876,11 +881,7 @@
             "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size",
             "in": "header",
             "required": true,
-            "type": "array",
-            "collectionFormat": "csv",
-            "items": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "request",
@@ -911,50 +912,10 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/list/light": {
-      "post": {
-        "tags": [
-          "Marketplaces - Orders - List"
-        ],
-        "operationId": "GetOrderListLight",
-        "summary": "Get a paginated list of all Orders without details",
-        "parameters": [
-          {
-            "$ref": "#/parameters/merchantCodeParameter"
-          },
-          {
-            "name": "request",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/orderListRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully fetched the list of Orders",
-            "schema": {
-              "$ref": "#/definitions/orderListLight"
-            }
-          },
-          "400": {
-            "description": "Could not process request for given parameters values. Please check error message for more details.",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
-          },
-          "default": {
-            "$ref": "#/responses/GeneralError"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/merchant/orders/v1/{merchantCode}/batches/setMerchantOrderInfos": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Batches"
+          "Merchant - Orders - Batches"
         ],
         "operationId": "SetMerchantOrderInfoList",
         "summary": "Send a batch of operations to set an Order's merchant information  (max 100 items per call)",
@@ -973,17 +934,11 @@
           }
         ],
         "responses": {
-          "202": {
-            "description": "Succesfully received and processed batched operations. Please check response to see the status per operation.",
-            "schema": {
-              "$ref": "#/definitions/batchOrderOperationResponse"
-            }
+          "200": {
+            "$ref": "#/responses/orderMerchantInfoBatchOperationResponse"
           },
           "400": {
-            "description": "Requested too many batch operations",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderBatchBadRequest"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -995,7 +950,7 @@
     "/merchant/orders/v1/{merchantCode}/batches/clearMerchantOrderInfos": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Batches"
+          "Merchant - Orders - Batches"
         ],
         "operationId": "ClearMerchantOrderInfoList",
         "summary": "Send a batch of operations to clear an Order's merchant information (max 100 items per call)",
@@ -1014,17 +969,11 @@
           }
         ],
         "responses": {
-          "202": {
-            "description": "Succesfully received and processed batched operations. Please check response to see the status per operation.",
-            "schema": {
-              "$ref": "#/definitions/batchOrderOperationResponse"
-            }
+          "200": {
+            "$ref": "#/responses/orderMerchantInfoBatchOperationResponse"
           },
           "400": {
-            "description": "Requested too many batch operations",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderBatchBadRequest"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1033,20 +982,17 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/batches/changeOrders/{changeOrderType}": {
+    "/merchant/orders/v1/{merchantCode}/batches/ship": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Batches"
+          "Merchant - Orders - Batches"
         ],
-        "operationId": "ChangeOrderList",
-        "summary": "Send a batch of operations to change your marketplace Order information (accept, ship, etc.)",
+        "operationId": "ShipOrderList",
+        "summary": "Ship multiple marketplace orders in one operation (max 100 items per call)",
         "description": "The purpose of this operation is to reduce the amount of request to the API.",
         "parameters": [
           {
             "$ref": "#/parameters/merchantCodeParameter"
-          },
-          {
-            "$ref": "#/parameters/changeOrderTypeParameter"
           },
           {
             "$ref": "#/parameters/userNameInQueryParameter"
@@ -1059,22 +1005,16 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/changeOrderListRequest"
+              "$ref": "#/definitions/shipOrderListRequest"
             }
           }
         ],
         "responses": {
           "202": {
-            "description": "Succesfully received and processed batched operations. Please check response to see the status per operation.",
-            "schema": {
-              "$ref": "#/definitions/batchOrderOperationResponse"
-            }
+            "$ref": "#/responses/orderChangeBatchOperationResponse"
           },
           "400": {
-            "description": "Requested too many batch operations",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderBatchBadRequest"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1083,10 +1023,215 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{imnOrderId}": {
+    "/merchant/orders/v1/{merchantCode}/batches/shipWithTrackingUrl": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Batches"
+        ],
+        "operationId": "ShipOrderListWithTrackUrl",
+        "summary": "Ship multiple marketplace orders with tracking url in one operation (max 100 items per call)",
+        "description": "The purpose of this operation is to reduce the amount of request to the API.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/shipOrderWithTrackingUrlListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "$ref": "#/responses/orderChangeBatchOperationResponse"
+          },
+          "400": {
+            "$ref": "#/responses/orderBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/batches/refund": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Batches"
+        ],
+        "operationId": "RefundOrderList",
+        "summary": "Refund multiple marketplace orders in one operation (max 100 items per call)",
+        "description": "The purpose of this operation is to reduce the amount of request to the API.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/refundOrderListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "$ref": "#/responses/orderChangeBatchOperationResponse"
+          },
+          "400": {
+            "$ref": "#/responses/orderBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/batches/accept": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Batches"
+        ],
+        "operationId": "AcceptOrderList",
+        "summary": "Accept multiple marketplace orders in one operation (max 100 items per call)",
+        "description": "The purpose of this operation is to reduce the amount of request to the API.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/acceptOrderListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "$ref": "#/responses/orderChangeBatchOperationResponse"
+          },
+          "400": {
+            "$ref": "#/responses/orderBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/batches/refuse": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Batches"
+        ],
+        "operationId": "RefuseOrderList",
+        "summary": "Refuse multiple marketplace orders in one operation (max 100 items per call)",
+        "description": "The purpose of this operation is to reduce the amount of request to the API.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/refuseOrderListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "$ref": "#/responses/orderChangeBatchOperationResponse"
+          },
+          "400": {
+            "$ref": "#/responses/orderBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/batches/cancel": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Batches"
+        ],
+        "operationId": "CancelOrderList",
+        "summary": "Cancel multiple marketplace orders in one operation (max 100 items per call)",
+        "description": "The purpose of this operation is to reduce the amount of request to the API.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cancelOrderListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "$ref": "#/responses/orderChangeBatchOperationResponse"
+          },
+          "400": {
+            "$ref": "#/responses/orderBatchBadRequest"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}": {
       "head": {
         "tags": [
-          "Marketplaces - Orders - Order"
+          "Merchant - Orders - Order"
         ],
         "operationId": "HeadOrder",
         "summary": "Get the meta information about the order (ETag, Last-Modified)",
@@ -1099,7 +1244,7 @@
             "$ref": "#/parameters/marketplaceCodeParameter"
           },
           {
-            "$ref": "#/parameters/imnOrderIdParameter"
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           },
           {
             "$ref": "#/parameters/ifNoneMatchParameter"
@@ -1124,10 +1269,7 @@
             "$ref": "#/responses/304_NotModified"
           },
           "404": {
-            "description": "Requested Order could not be found",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderNotFound"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1137,7 +1279,7 @@
       },
       "get": {
         "tags": [
-          "Marketplaces - Orders - Order"
+          "Merchant - Orders - Order"
         ],
         "operationId": "GetOrder",
         "summary": "Get full Order and Order Item(s) properties",
@@ -1149,7 +1291,7 @@
             "$ref": "#/parameters/marketplaceCodeParameter"
           },
           {
-            "$ref": "#/parameters/imnOrderIdParameter"
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           },
           {
             "$ref": "#/parameters/ifNoneMatchParameter"
@@ -1170,17 +1312,14 @@
               }
             },
             "schema": {
-              "$ref": "#/definitions/order"
+              "$ref": "#/definitions/orderIndex"
             }
           },
           "304": {
             "$ref": "#/responses/304_NotModified"
           },
           "404": {
-            "description": "Requested Order could not be found",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderNotFound"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1189,10 +1328,10 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{imnOrderId}/history": {
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/history": {
       "get": {
         "tags": [
-          "Marketplaces - Orders - Order"
+          "Merchant - Orders - Order"
         ],
         "operationId": "GetOrderHistory",
         "summary": "Get an Order's harvest and change history",
@@ -1204,7 +1343,7 @@
             "$ref": "#/parameters/marketplaceCodeParameter"
           },
           {
-            "$ref": "#/parameters/imnOrderIdParameter"
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           },
           {
             "$ref": "#/parameters/ifNoneMatchParameter"
@@ -1221,10 +1360,7 @@
             "$ref": "#/responses/304_NotModified"
           },
           "404": {
-            "description": "Requested Order could not be found",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderNotFound"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1233,10 +1369,10 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{imnOrderId}/setMerchantOrderInfo": {
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/setMerchantOrderInfo": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Order"
+          "Merchant - Orders - Order"
         ],
         "operationId": "SetMerchantOrderInfo",
         "summary": "Set an Order's merchant information",
@@ -1248,7 +1384,7 @@
             "$ref": "#/parameters/marketplaceCodeParameter"
           },
           {
-            "$ref": "#/parameters/imnOrderIdParameter"
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           },
           {
             "name": "request",
@@ -1270,10 +1406,7 @@
             }
           },
           "404": {
-            "description": "Requested Order could not be found",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderNotFound"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1282,10 +1415,10 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{imnOrderId}/clearMerchantOrderInfo": {
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/clearMerchantOrderInfo": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Order"
+          "Merchant - Orders - Order"
         ],
         "operationId": "ClearMerchantOrderInfo",
         "summary": "Clear an Order's merchant information",
@@ -1297,7 +1430,7 @@
             "$ref": "#/parameters/marketplaceCodeParameter"
           },
           {
-            "$ref": "#/parameters/imnOrderIdParameter"
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           }
         ],
         "responses": {
@@ -1311,10 +1444,7 @@
             }
           },
           "404": {
-            "description": "Requested Order could not be found",
-            "schema": {
-              "$ref": "#/definitions/errorResponseMessage"
-            }
+            "$ref": "#/responses/orderNotFound"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -1323,13 +1453,13 @@
         "deprecated": false
       }
     },
-    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{imnOrderId}/{changeOrderType}": {
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/accept": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Order"
+          "Merchant - Orders - Order"
         ],
-        "operationId": "ChangeOrder",
-        "summary": "Change your marketplace Order Information (accept, ship, etc.)",
+        "operationId": "AcceptOrder",
+        "summary": "Accept your marketplace order",
         "parameters": [
           {
             "$ref": "#/parameters/merchantCodeParameter"
@@ -1338,10 +1468,174 @@
             "$ref": "#/parameters/marketplaceCodeParameter"
           },
           {
-            "$ref": "#/parameters/imnOrderIdParameter"
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           },
           {
-            "$ref": "#/parameters/changeOrderTypeParameter"
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/ifMatchParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Order accept request accepted"
+          },
+          "400": {
+            "description": "Invalid order accept request, could not be send to the marketplace. Please check your request.",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
+          "404": {
+            "$ref": "#/responses/orderNotFound"
+          },
+          "409": {
+            "$ref": "#/responses/orderChangeAlreadyInProgress"
+          },
+          "412": {
+            "$ref": "#/responses/412_PreConditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/refuse": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Order"
+        ],
+        "operationId": "RefuseOrder",
+        "summary": "Refuse your marketplace order",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/ifMatchParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Order refuse request accepted"
+          },
+          "400": {
+            "description": "Invalid order refuse request, could not be send to the marketplace. Please check your request.",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
+          "404": {
+            "$ref": "#/responses/orderNotFound"
+          },
+          "409": {
+            "$ref": "#/responses/orderChangeAlreadyInProgress"
+          },
+          "412": {
+            "$ref": "#/responses/412_PreConditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/cancel": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Order"
+        ],
+        "operationId": "CancelOrder",
+        "summary": "Cancel your marketplace order",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/ifMatchParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cancelOrderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Order cancel request accepted"
+          },
+          "400": {
+            "description": "Invalid order cancel request, could not be send to the marketplace. Please check your request.",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
+          "404": {
+            "$ref": "#/responses/orderNotFound"
+          },
+          "409": {
+            "$ref": "#/responses/orderChangeAlreadyInProgress"
+          },
+          "412": {
+            "$ref": "#/responses/412_PreConditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/ship": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Order"
+        ],
+        "operationId": "ShipOrder",
+        "summary": "Ship your marketplace order",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
           },
           {
             "$ref": "#/parameters/userNameInQueryParameter"
@@ -1352,9 +1646,9 @@
           {
             "name": "request",
             "in": "body",
-            "required": false,
+            "required": true,
             "schema": {
-              "$ref": "#/definitions/changeOrderRequest"
+              "$ref": "#/definitions/shipOrderRequest"
             }
           },
           {
@@ -1363,31 +1657,144 @@
         ],
         "responses": {
           "202": {
-            "description": "Order change request accepted"
+            "description": "Order ship request accepted"
           },
           "400": {
-            "description": "Invalid order change request, could not be send to the marketplace. Please check the body of this request.",
+            "description": "Invalid order ship request, could not be send to the marketplace. Please check the body of this request.",
             "schema": {
               "$ref": "#/definitions/errorResponseMessage"
             }
           },
           "404": {
-            "description": "Requested Order could not be found",
+            "$ref": "#/responses/orderNotFound"
+          },
+          "409": {
+            "$ref": "#/responses/orderChangeAlreadyInProgress"
+          },
+          "412": {
+            "$ref": "#/responses/412_PreConditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/shipWithTrackingUrl": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Order"
+        ],
+        "operationId": "ShipOrderWithTrackingUrl",
+        "summary": "Ship your marketplace order with tracking url",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/shipOrderWithTrackingUrlRequest"
+            }
+          },
+          {
+            "$ref": "#/parameters/ifMatchParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Order ship with tracking url request accepted"
+          },
+          "400": {
+            "description": "Invalid order ship request, could not be send to the marketplace. Please check the body of this request.",
             "schema": {
               "$ref": "#/definitions/errorResponseMessage"
             }
           },
+          "404": {
+            "$ref": "#/responses/orderNotFound"
+          },
           "409": {
-            "description": "Already processing a change request for this Order.\\\nPlease refresh your clients Order information and retry later.\n",
-            "headers": {
-              "Retry-After": {
-                "type": "integer",
-                "description": "Indicates the duration in seconds to wait to be able to make this request again"
-              }
-            },
+            "$ref": "#/responses/orderChangeAlreadyInProgress"
+          },
+          "412": {
+            "$ref": "#/responses/412_PreConditionFailed"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/{marketplaceCode}/{marketplaceOrderId}/refund": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Order"
+        ],
+        "operationId": "RefundOrder",
+        "summary": "Refund your marketplace order",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceOrderIdParameter"
+          },
+          {
+            "$ref": "#/parameters/userNameInQueryParameter"
+          },
+          {
+            "$ref": "#/parameters/testModeInQueryParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/refundOrderRequest"
+            }
+          },
+          {
+            "$ref": "#/parameters/ifMatchParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Order refund request accepted"
+          },
+          "400": {
+            "description": "Invalid order refund request, could not be send to the marketplace. Please check the body of this request.",
+            "x-exceptions": [
+              "ValidationException"
+            ],
             "schema": {
               "$ref": "#/definitions/errorResponseMessage"
             }
+          },
+          "404": {
+            "$ref": "#/responses/orderNotFound"
+          },
+          "409": {
+            "$ref": "#/responses/orderChangeAlreadyInProgress"
           },
           "412": {
             "$ref": "#/responses/412_PreConditionFailed"
@@ -1402,7 +1809,7 @@
     "/merchant/orders/v1/{merchantCode}/subscriptions": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Subscriptions"
+          "Merchant - Orders - Subscriptions - DRAFT"
         ],
         "operationId": "CreateSubscription",
         "summary": "Creates a subscription to the orders",
@@ -1446,7 +1853,7 @@
       },
       "get": {
         "tags": [
-          "Marketplaces - Orders - Subscriptions"
+          "Merchant - Orders - Subscriptions - DRAFT"
         ],
         "operationId": "GetSubscriptionList",
         "summary": "Get the subscription list",
@@ -1487,7 +1894,7 @@
     "/merchant/orders/v1/{merchantCode}/subscriptions/{id}": {
       "get": {
         "tags": [
-          "Marketplaces - Orders - Subscriptions"
+          "Merchant - Orders - Subscriptions - DRAFT"
         ],
         "operationId": "GetSubscription",
         "summary": "Get a subscription to the orders",
@@ -1526,7 +1933,7 @@
       },
       "delete": {
         "tags": [
-          "Marketplaces - Orders - Subscriptions"
+          "Merchant - Orders - Subscriptions - DRAFT"
         ],
         "operationId": "DeleteSubscription",
         "summary": "Delete a subscription to the orders",
@@ -1568,7 +1975,7 @@
     "/merchant/orders/v1/{merchantCode}/subscriptions/{id}/activate": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Subscriptions"
+          "Merchant - Orders - Subscriptions - DRAFT"
         ],
         "operationId": "ActivateSubscription",
         "summary": "Activate a subscription to the orders",
@@ -1609,7 +2016,7 @@
     "/merchant/orders/v1/{merchantCode}/subscriptions/{id}/deactivate": {
       "post": {
         "tags": [
-          "Marketplaces - Orders - Subscriptions"
+          "Merchant - Orders - Subscriptions - DRAFT"
         ],
         "operationId": "DeactivateSubscription",
         "summary": "Deactivate a subscription to the orders",
@@ -1651,6 +2058,81 @@
         "deprecated": false
       }
     },
+    "/merchant/orders/v1/{merchantCode}/reports/status": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Statistics"
+        ],
+        "summary": "Get the report status",
+        "description": "Get the report status",
+        "operationId": "GetMerchantReportStatus",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your reporting status",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/reportStatusByMarketplace"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/responses/GeneralError"
+          },
+          "404": {
+            "$ref": "#/responses/merchantNotFound"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/orders/v1/{merchantCode}/reports/byday": {
+      "post": {
+        "tags": [
+          "Merchant - Orders - Statistics"
+        ],
+        "summary": "Get the report by day",
+        "description": "Get the report by day",
+        "operationId": "GetMerchantReportByDay",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reportByDayRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your reporting by day",
+            "schema": {
+              "$ref": "#/definitions/reportByDayResponse"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/GeneralError"
+          },
+          "404": {
+            "$ref": "#/responses/merchantNotFound"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
     "/merchant/offers/v1/{merchantCode}": {
       "post": {
         "tags": [
@@ -1674,6 +2156,9 @@
         "responses": {
           "204": {
             "description": "The merchant offers changes have been saved!"
+          },
+          "400": {
+            "$ref": "#/responses/offerBatchBadRequest"
           },
           "default": {
             "$ref": "#/responses/GeneralError"
@@ -2377,58 +2862,129 @@
         }
       ]
     },
-    "imnOrderId": {
-      "description": "The IMN Order identifier",
-      "type": "string",
-      "format": "uuid",
-      "example": "00000000000000000000000000000000000000000000000"
-    },
-    "order_MerchantOrderId": {
-      "description": "The order merchant identifier",
-      "type": "string",
-      "example": "MyOrderMerchantId"
-    },
-    "order_MerchantECommerceSoftwareName": {
-      "description": "The e-commerce software name of the merchant",
-      "type": "string",
-      "example": "Prestashop"
-    },
-    "order_MerchantECommerceSoftwareVersion": {
-      "description": "The e-commece software version of the merchant",
-      "type": "string",
-      "example": "123.0.1"
-    },
-    "dateSearchType": {
-      "description": "Indicates on which date you want to make the filter",
-      "type": "string",
-      "enum": [
-        "Modification",
-        "Purchase",
-        "MarketPlaceModification"
+    "reportStatusByMarketplace": {
+      "type": "object",
+      "required": [
+        "toAccept",
+        "toShip",
+        "lateToShip",
+        "marketplaceCode"
       ],
-      "default": "Modification"
+      "properties": {
+        "toAccept": {
+          "type": "integer",
+          "description": "The order count to accept",
+          "example": 10
+        },
+        "toShip": {
+          "type": "integer",
+          "description": "The order count to ship",
+          "example": 34
+        },
+        "lateToShip": {
+          "type": "integer",
+          "description": "The order count late to ship",
+          "example": 56
+        },
+        "marketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
+        }
+      }
     },
-    "pageSize": {
-      "description": "Indicate the order count per page",
-      "type": "integer",
-      "format": "int32",
-      "default": 100,
-      "minimum": 25,
-      "maximum": 100,
-      "example": 100
+    "reportByDayRequest": {
+      "required": [
+        "beginPeriodUtcDate",
+        "endPeriodUtcDate"
+      ],
+      "type": "object",
+      "properties": {
+        "marketplaceCodes": {
+          "description": "Indicate the marketplace identifier list",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/marketplaceCode"
+          },
+          "example": [
+            "C1",
+            "E1",
+            "R1"
+          ]
+        },
+        "beginPeriodUtcDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The begin date of the period for the report",
+          "example": "2006-11-20T00:00:00Z"
+        },
+        "endPeriodUtcDate": {
+          "type": "string",
+          "format": "date",
+          "description": "The end date of the period for the report",
+          "example": "2006-12-20T00:00:00Z"
+        }
+      }
     },
-    "pageNumber": {
-      "description": "Indicates the page number",
-      "format": "int32",
-      "type": "integer",
-      "example": 1,
-      "minimum": 1,
-      "default": 1
+    "reportByDayResponse": {
+      "type": "object",
+      "required": [
+        "days"
+      ],
+      "properties": {
+        "days": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/reportByDay"
+          }
+        }
+      }
     },
-    "order_Buyer_Name": {
-      "description": "Buyer full name",
-      "type": "string",
-      "example": "Monroe"
+    "reportByDay": {
+      "type": "object",
+      "required": [
+        "day",
+        "byMarketplaces"
+      ],
+      "properties": {
+        "day": {
+          "type": "string",
+          "format": "date",
+          "example": "2017-04-23"
+        },
+        "byMarketplaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/reportByDayByMarketplace"
+          }
+        }
+      }
+    },
+    "reportByDayByMarketplace": {
+      "type": "object",
+      "required": [
+        "marketplaceCode",
+        "currencyCode",
+        "orderCount",
+        "turnover"
+      ],
+      "properties": {
+        "marketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
+        },
+        "currencyCode": {
+          "$ref": "#/definitions/currencyCode"
+        },
+        "orderCount": {
+          "type": "integer",
+          "description": "The order count",
+          "example": 42
+        },
+        "turnover": {
+          "type": "number",
+          "description": "The turnover",
+          "example": 234.42
+        }
+      }
     },
     "orderListRequestWithoutPagination": {
       "type": "object",
@@ -2447,6 +3003,11 @@
             "C1"
           ]
         },
+        "late": {
+          "type": "boolean",
+          "description": "Looking for late orders",
+          "example": true
+        },
         "imnOrderStatuses": {
           "type": "array",
           "items": {
@@ -2457,7 +3018,7 @@
           ]
         },
         "dateSearchType": {
-          "$ref": "#/definitions/dateSearchType"
+          "$ref": "#/definitions/orderDateSearchType"
         },
         "beginPeriodUtcDate": {
           "description": "The begin period you want to make the search. \\\nThe period MUST not be greater than 30 days.\nThe begin period MUST be lower than the end period.\n",
@@ -2471,8 +3032,11 @@
           "type": "string",
           "example": "2017-04-01T13:10:01Z"
         },
-        "order_Buyer_Name": {
-          "$ref": "#/definitions/order_Buyer_Name"
+        "buyerFirstName": {
+          "$ref": "#/definitions/firstName"
+        },
+        "buyerLastName": {
+          "$ref": "#/definitions/lastName"
         },
         "marketplaceOrderIds": {
           "type": "array",
@@ -2480,14 +3044,14 @@
             "$ref": "#/definitions/marketplaceOrderId"
           },
           "example": [
-            "AmazonOrderId1234"
+            "CdiscountOrderId1234"
           ]
         },
-        "order_MerchantOrderIds": {
+        "merchantOrderIds": {
           "description": "Merchant order id list",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/order_MerchantOrderId"
+            "$ref": "#/definitions/merchantOrderId"
           },
           "example": [
             "MyOrderId1234"
@@ -2520,174 +3084,6 @@
         }
       ]
     },
-    "businessOperationType": {
-      "type": "string",
-      "x-lov": "OrderChangeBusinessOperationType",
-      "example": "ShipOrder"
-    },
-    "orderIdentifier": {
-      "type": "object",
-      "required": [
-        "marketplaceCode",
-        "merchantCode",
-        "imnOrderId"
-      ],
-      "properties": {
-        "marketplaceCode": {
-          "$ref": "#/definitions/marketplaceCode"
-        },
-        "merchantCode": {
-          "$ref": "#/definitions/merchantCode"
-        },
-        "imnOrderId": {
-          "$ref": "#/definitions/imnOrderId"
-        }
-      }
-    },
-    "clearMerchantOrderInfoListRequest": {
-      "type": "object",
-      "required": [
-        "orders"
-      ],
-      "properties": {
-        "orders": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/orderIdentifier"
-          },
-          "maxItems": 100,
-          "uniqueItems": true,
-          "minItems": 1,
-          "example": [
-            {
-              "marketplaceCode": "Amazon",
-              "merchantCode": 1234,
-              "imnOrderId": "00000000000000000000000000000000000000000000000"
-            },
-            {
-              "marketplaceCode": "Amazon",
-              "merchantCode": 5678,
-              "imnOrderId": "00000000000000000000000000000000000000000000000"
-            },
-            {
-              "marketplaceCode": "Ebay",
-              "merchantCode": 9876,
-              "imnOrderId": "00000000000000000000000000000000000000000000000"
-            }
-          ]
-        }
-      }
-    },
-    "setMerchantOrderInfoListRequest": {
-      "type": "object",
-      "required": [
-        "order_MerchantECommerceSoftwareName",
-        "order_MerchantECommerceSoftwareVersion",
-        "orders"
-      ],
-      "properties": {
-        "order_MerchantECommerceSoftwareName": {
-          "$ref": "#/definitions/order_MerchantECommerceSoftwareName"
-        },
-        "order_MerchantECommerceSoftwareVersion": {
-          "$ref": "#/definitions/order_MerchantECommerceSoftwareVersion"
-        },
-        "orders": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/setMerchantOrderInfoListRequestItem"
-          },
-          "maxItems": 100,
-          "uniqueItems": true,
-          "minItems": 1,
-          "example": [
-            {
-              "marketplaceCode": "Amazon",
-              "merchantCode": 1234,
-              "imnOrderId": "8D47FF1427A26B064ca98e95f644361ada5a5be0bbb3b53",
-              "order_MerchantOrderId": "BX1234"
-            },
-            {
-              "marketplaceCode": "Amazon",
-              "merchantCode": 5678,
-              "imnOrderId": "8D47FF149F213D055f26e3c413e4c9ba5c5cfda460547a4",
-              "order_MerchantOrderId": "BX5678"
-            },
-            {
-              "marketplaceCode": "Ebay",
-              "merchantCode": 9876,
-              "imnOrderId": "8D47FF150217B60bdec05ab61c445d1a59e3da050b52823",
-              "order_MerchantOrderId": "BX9876"
-            }
-          ]
-        }
-      }
-    },
-    "setMerchantOrderInfoListRequestItem": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/orderIdentifier"
-        },
-        {
-          "type": "object",
-          "required": [
-            "marketplaceCode",
-            "merchantCode",
-            "imnOrderId",
-            "order_MerchantOrderId"
-          ],
-          "properties": {
-            "order_MerchantOrderId": {
-              "$ref": "#/definitions/order_MerchantOrderId"
-            }
-          }
-        }
-      ]
-    },
-    "setMerchantOrderInfoRequest": {
-      "type": "object",
-      "required": [
-        "order_MerchantOrderId",
-        "order_MerchantECommerceSoftwareName",
-        "order_MerchantECommerceSoftwareVersion"
-      ],
-      "properties": {
-        "order_MerchantOrderId": {
-          "$ref": "#/definitions/order_MerchantOrderId"
-        },
-        "order_MerchantECommerceSoftwareName": {
-          "$ref": "#/definitions/order_MerchantECommerceSoftwareName"
-        },
-        "order_MerchantECommerceSoftwareVersion": {
-          "$ref": "#/definitions/order_MerchantECommerceSoftwareVersion"
-        }
-      }
-    },
-    "accountSynchronizationList": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/definitions/accountSynchronization"
-      }
-    },
-    "accountSynchronization": {
-      "type": "object",
-      "required": [
-        "merchantCode",
-        "marketplaceCode",
-        "marketplaceBusinessCode"
-      ],
-      "properties": {
-        "completedHarvestSynchroUtcDate": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "processing": {
-      "description": "If true, there is currently a harvest or an order change in progress. Otherwise false.",
-      "type": "boolean",
-      "example": false
-    },
     "links.GetOrderLink": {
       "allOf": [
         {
@@ -2695,238 +3091,39 @@
         },
         {
           "example": {
-            "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000",
+            "href": "/merchant/orders/v1/MLT01/C1/A0CD3FG",
             "method": "GET"
           }
         }
       ]
     },
-    "orderHeaderLinks": {
+    "orderLinks": {
       "type": "object",
+      "description": "The links related to an order.\nThe \"go\" property is the link to see the order on https://go.imn.io\nExample: TBD\n",
       "required": [
-        "self"
+        "self",
+        "go",
+        "history",
+        "setMerchantInfo",
+        "clearMerchantInfo"
       ],
       "properties": {
         "self": {
           "$ref": "#/definitions/links.GetOrderLink"
-        }
-      }
-    },
-    "orderHeader": {
-      "description": "Describe the basic information related to an order. All properties with the prefix order_ are translated in the list of values /user/lov/OrderMetaInfoOrderDetails",
-      "type": "object",
-      "required": [
-        "marketplaceCode",
-        "merchantCode",
-        "imnOrderId",
-        "order_MarketplaceOrderId",
-        "order_Status_IMNOrderStatus",
-        "order_PurchaseUtcDate",
-        "order_LastModificationUtcDate",
-        "order_MarketplaceLastModificationUtcDate",
-        "processing",
-        "etag",
-        "links"
-      ],
-      "properties": {
-        "marketplaceCode": {
-          "$ref": "#/definitions/marketplaceCode"
         },
-        "merchantCode": {
-          "$ref": "#/definitions/merchantCode"
-        },
-        "imnOrderId": {
-          "$ref": "#/definitions/imnOrderId"
-        },
-        "imnOrderUrl": {
+        "go": {
           "$ref": "#/definitions/httpUrl"
         },
-        "order_MarketplaceOrderId": {
-          "$ref": "#/definitions/marketplaceOrderId"
+        "history": {
+          "$ref": "#/definitions/links.GetOrderHistoryLink"
         },
-        "order_Status_IMNOrderStatus": {
-          "$ref": "#/definitions/imnOrderStatus"
+        "setMerchantInfo": {
+          "$ref": "#/definitions/links.SetMerchantOrderInfoLink"
         },
-        "order_Status_MarketplaceOrderStatus": {
-          "$ref": "#/definitions/marketplaceOrderStatus"
-        },
-        "order_MerchantOrderId": {
-          "$ref": "#/definitions/order_MerchantOrderId"
-        },
-        "order_MerchantECommerceSoftwareName": {
-          "$ref": "#/definitions/order_MerchantECommerceSoftwareName"
-        },
-        "order_MerchantECommerceSoftwareVersion": {
-          "$ref": "#/definitions/order_MerchantECommerceSoftwareVersion"
-        },
-        "order_PurchaseUtcDate": {
-          "description": "The purchase date of this order",
-          "format": "date-time",
-          "type": "string",
-          "example": "2017-03-31T21:30:23Z"
-        },
-        "order_LastModificationUtcDate": {
-          "description": "The last modification UTC date done by IMN of this order",
-          "format": "date-time",
-          "type": "string",
-          "example": "2017-04-16T10:30:23Z"
-        },
-        "order_MarketplaceLastModificationUtcDate": {
-          "description": "The last modification UTC date done by the marketplace on this order",
-          "format": "date-time",
-          "type": "string",
-          "example": "2017-04-16T10:25:23Z"
-        },
-        "order_Buyer_Name": {
-          "$ref": "#/definitions/order_Buyer_Name"
-        },
-        "order_TotalPrice": {
-          "description": "The total price of this order (corresponding to the amount paid by the customer)",
-          "format": "decimal",
-          "type": "number",
-          "example": 101.42
-        },
-        "order_CurrencyCode": {
-          "$ref": "#/definitions/currencyCode"
-        },
-        "processing": {
-          "$ref": "#/definitions/processing"
-        },
-        "etag": {
-          "$ref": "#/definitions/etag"
-        },
-        "links": {
-          "$ref": "#/definitions/orderHeaderLinks"
+        "clearMerchantInfo": {
+          "$ref": "#/definitions/links.ClearMerchantOrderInfoLink"
         }
       }
-    },
-    "etag": {
-      "description": "ETag value to identify the order.\\\nThis information is required for the operation GetOrder and ChangeOrder.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n",
-      "type": "string",
-      "example": "\"ca071a4580129f932a03971968ffef69\""
-    },
-    "orderItem": {
-      "description": "Describe an order item. All properties with the prefix orderItem_ are translated in the list of values /user/lov/OrderMetaInfoOrderItems",
-      "type": "object",
-      "required": [
-        "imnOrderItemId",
-        "orderItem_OrderItemType"
-      ],
-      "properties": {
-        "imnOrderItemId": {
-          "description": "The IMN identifier of the order Item",
-          "type": "string",
-          "example": "1"
-        },
-        "orderItem_OrderItemType": {
-          "description": "The order item type of the order item",
-          "type": "string",
-          "example": "Product"
-        },
-        "orderItem_MerchantImportedProductId": {
-          "description": "The product id indicated in the catalog importation in IMN system for this order item. This property will help you to match the order to the inventory system.",
-          "type": "string",
-          "example": "73267"
-        },
-        "orderItem_MerchantImportedProductIdColumnName": {
-          "description": "The column name for the product id indicated in the catalog importation in IMN system related to this order item. This property will help you to match the order to the inventory system.",
-          "example": "reference",
-          "type": "string"
-        },
-        "orderItem_MerchantImportedProductUrl": {
-          "description": "The product url indicated in the catalog importation in IMN system related to this order item",
-          "example": "http://blabla.com/my-folder/73267.html",
-          "type": "string"
-        },
-        "orderItem_MerchantProductIdColumnName": {
-          "description": "The column name indicate in the mapping for the product id related to the order item",
-          "example": "reference_produit",
-          "type": "string"
-        },
-        "orderItem_IMNStoreId": {
-          "description": "The store id in the IMN system related to the order item. This property will help you to match the order to the inventory system.",
-          "example": "00000000-cceb-4c20-b2c9-000000000000",
-          "type": "string"
-        },
-        "orderItem_ItemTax": {
-          "description": "The tax of the order item",
-          "type": "number",
-          "format": "decimal",
-          "example": 0.0
-        },
-        "orderItem_Title": {
-          "description": "The title of the order item",
-          "example": "bLA acide-plomb 6v-4.5ah 70x48x106mm",
-          "type": "string"
-        },
-        "orderItem_ImageUrl": {
-          "description": "The URL of the image of the order item",
-          "example": "http://blabla.com//das6-45.jpg",
-          "type": "string"
-        },
-        "orderItem_MerchantProductId": {
-          "description": "The merchant product id of the order item",
-          "example": "BlaLdas6-4.5",
-          "type": "string"
-        },
-        "orderItem_MarketPlaceProductId": {
-          "description": "The marketplace product identifier of the order item",
-          "example": "",
-          "type": "string"
-        },
-        "orderItem_ItemPrice": {
-          "description": "The price of the order item",
-          "example": 6.86,
-          "type": "number",
-          "format": "decimal"
-        },
-        "orderItem_Quantity": {
-          "description": "The quantity of the order item",
-          "example": 1,
-          "type": "number",
-          "format": "decimal"
-        },
-        "orderItem_TotalPrice": {
-          "description": "The total price of the order item",
-          "example": 6.86,
-          "type": "number",
-          "format": "decimal"
-        },
-        "orderItem_Shipping_Price": {
-          "description": "The shipping price of the order item",
-          "type": "number",
-          "example": 0.0,
-          "format": "decimal"
-        }
-      }
-    },
-    "orderLinks": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/orderHeaderLinks"
-        },
-        {
-          "type": "object",
-          "required": [
-            "self",
-            "history",
-            "harvest",
-            "setMerchantInfo",
-            "clearMerchantInfo"
-          ],
-          "properties": {
-            "history": {
-              "$ref": "#/definitions/links.GetOrderHistoryLink"
-            },
-            "setMerchantInfo": {
-              "$ref": "#/definitions/links.SetMerchantOrderInfoLink"
-            },
-            "clearMerchantInfo": {
-              "$ref": "#/definitions/links.ClearMerchantOrderInfoLink"
-            }
-          }
-        }
-      ]
     },
     "links.GetOrderHistoryLink": {
       "allOf": [
@@ -2935,7 +3132,7 @@
         },
         {
           "example": {
-            "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/history",
+            "href": "/merchant/orders/v1/MLT01/C1/A0CD3FG/history",
             "method": "GET"
           }
         }
@@ -2948,7 +3145,7 @@
         },
         {
           "example": {
-            "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/setMerchantOrderInfo",
+            "href": "/merchant/orders/v1/MLT01/C1/A0CD3FG/setMerchantOrderInfo",
             "method": "POST",
             "parameters": {
               "request": {
@@ -2968,446 +3165,99 @@
         },
         {
           "example": {
-            "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/clearMerchantOrderInfo",
+            "href": "/merchant/orders/v1/MLT01/C1/A0CD3FG/clearMerchantOrderInfo",
             "method": "POST"
-          }
-        }
-      ]
-    },
-    "links.HarvestOrderLink": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/link3"
-        },
-        {
-          "example": {
-            "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/harvest",
-            "method": "POST"
-          }
-        }
-      ]
-    },
-    "order": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/orderHeader"
-        },
-        {
-          "type": "object",
-          "description": "Describe in details all informations related to an order. All properties with the prefix order_ are translated in the list of values /user/lov/OrderMetaInfoOrderDetails.",
-          "required": [
-            "marketplaceCode",
-            "merchantCode",
-            "imnOrderId",
-            "marketplaceBusinessCode",
-            "order_MarketplaceOrderId",
-            "order_Status_IMNOrderStatus",
-            "order_PurchaseUtcDate",
-            "order_LastModificationUtcDate",
-            "order_MarketplaceLastModificationUtcDate",
-            "processing",
-            "etag",
-            "links",
-            "orderItems",
-            "transitionLinks"
-          ],
-          "properties": {
-            "links": {
-              "$ref": "#/definitions/orderLinks"
-            },
-            "order_MarketPlaceChannel": {
-              "description": "Useful to identify the origin of the order. For example in Amazon.",
-              "type": "string",
-              "example": "Amazon France"
-            },
-            "order_TotalTax": {
-              "description": "The total tax of this order",
-              "type": "number",
-              "format": "decimal",
-              "example": 0.0
-            },
-            "order_TotalCommission": {
-              "description": "The total commission of this order",
-              "type": "number",
-              "format": "decimal",
-              "example": 0.0
-            },
-            "order_PaymentMethod": {
-              "description": "The payment method of this order",
-              "type": "string",
-              "example": "1 / 1X"
-            },
-            "order_PayingUtcDate": {
-              "description": "The UTC date of the payment of this order",
-              "type": "string",
-              "format": "date-time",
-              "example": "2017-04-01T13:22:01Z"
-            },
-            "order_Comment": {
-              "description": "The comment associated to this order",
-              "type": "string",
-              "example": "This is a comment"
-            },
-            "order_Shipping_Civility": {
-              "description": "The civility of the person in the shipping address for this order",
-              "type": "string",
-              "example": "MRS"
-            },
-            "order_Shipping_CompanyName": {
-              "description": "The company name of the shipping address for this order",
-              "type": "string",
-              "example": "My Company"
-            },
-            "order_Shipping_AddressName": {
-              "description": "The name of the person in the shipping address for this order",
-              "type": "string",
-              "example": "Jacques BAUREGARD"
-            },
-            "order_Shipping_Email": {
-              "description": "The email of the person in the shipping address for this order",
-              "type": "string",
-              "example": "client_000000@manomano.fr"
-            },
-            "order_Shipping_AddressLine1": {
-              "description": "The shipping address line 1 of this order",
-              "type": "string",
-              "example": "5 rue amÃ©lie"
-            },
-            "order_Shipping_AddressLine2": {
-              "description": "The shipping address line 2 of this order",
-              "type": "string",
-              "example": "BDR"
-            },
-            "order_Shipping_AddressLine3": {
-              "description": "The shipping address line 3 of this order",
-              "type": "string",
-              "example": "RDC"
-            },
-            "order_Shipping_AddressPostalCode": {
-              "description": "The shipping address postal code of this order",
-              "type": "string",
-              "example": "13014"
-            },
-            "order_Shipping_AddressCity": {
-              "description": "The shipping address city of this order",
-              "type": "string",
-              "example": "Marseille"
-            },
-            "order_Shipping_AddressStateOrRegion": {
-              "description": "The shipping address state or region of this order",
-              "type": "string",
-              "example": "BDR"
-            },
-            "order_Shipping_AddressCountryName": {
-              "description": "The shipping address country name",
-              "type": "string",
-              "example": "France"
-            },
-            "order_Shipping_AddressCountryIsoCodeAlpha2": {
-              "description": "The shipping address country iso code alpha 2 (see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#/decoding_table for more details)",
-              "type": "string",
-              "example": "FR"
-            },
-            "order_Shipping_Phone": {
-              "description": "The phone number of the person in the shipping address for this order",
-              "type": "string",
-              "example": "+33000000041"
-            },
-            "order_Shipping_MobilePhone": {
-              "description": "The mobile phone number of the person in the shipping address for this order",
-              "type": "string",
-              "example": "+33000000042"
-            },
-            "order_Shipping_Price": {
-              "description": "The shipping price of this order",
-              "type": "number",
-              "format": "decimal",
-              "example": 6.9
-            },
-            "order_Shipping_Method": {
-              "description": "The shipping method of this order",
-              "type": "string",
-              "example": "DPD Domicile"
-            },
-            "order_Shipping_ShippingTax": {
-              "description": "The shipping tax for this order",
-              "type": "number",
-              "format": "decimal",
-              "example": 0.0
-            },
-            "order_Shipping_EarliestShipUtcDate": {
-              "description": "The UTC date of the earliest ship for this order",
-              "type": "string",
-              "example": "2017-04-02T21:30:00Z",
-              "format": "date-time"
-            },
-            "order_Shipping_LatestShipUtcDate": {
-              "description": "The UTC date of the latest ship for this order",
-              "type": "string",
-              "format": "date-time",
-              "example": "2017-04-30T21:30:00Z"
-            },
-            "order_Buyer_Identifier": {
-              "description": "The buyer identifier for this order",
-              "type": "string",
-              "example": "1234567890"
-            },
-            "order_Buyer_Civility": {
-              "description": "The buyer civility for this order",
-              "type": "string",
-              "example": "Marseille"
-            },
-            "order_Buyer_CompanyName": {
-              "description": "The buyer company name for this order",
-              "type": "string",
-              "example": "Marsillia"
-            },
-            "order_Buyer_Email": {
-              "description": "The email of the buyer for this order",
-              "type": "string",
-              "example": "client_000000@manomano.fr"
-            },
-            "order_Buyer_AddressLine1": {
-              "description": "The Buyer address line 1 of this order",
-              "type": "string",
-              "example": "5 rue amÃ©lie"
-            },
-            "order_Buyer_AddressLine2": {
-              "description": "The Buyer address line 2 of this order",
-              "type": "string",
-              "example": "BDR"
-            },
-            "order_Buyer_AddressLine3": {
-              "description": "The Buyer address line 3 of this order",
-              "type": "string",
-              "example": "RDC"
-            },
-            "order_Buyer_AddressPostalCode": {
-              "description": "The Buyer address postal code of this order",
-              "type": "string",
-              "example": "13014"
-            },
-            "order_Buyer_AddressCity": {
-              "description": "The Buyer address city of this order",
-              "type": "string",
-              "example": "Marseille"
-            },
-            "order_Buyer_AddressStateOrRegion": {
-              "description": "The Buyer address state or region of this order",
-              "type": "string",
-              "example": "BDR"
-            },
-            "order_Buyer_AddressCountryName": {
-              "description": "The Buyer address country name",
-              "type": "string",
-              "example": "France"
-            },
-            "order_Buyer_AddressCountryIsoCodeAlpha2": {
-              "description": "The Buyer address country iso code alpha 2 (see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#/decoding_table for more details)",
-              "type": "string",
-              "example": "FR"
-            },
-            "order_Buyer_Phone": {
-              "description": "The phone number of the buyer for this order",
-              "type": "string",
-              "example": "+33000000101"
-            },
-            "order_Buyer_MobilePhone": {
-              "description": "The mobile phone number of the buyer for this order",
-              "type": "string",
-              "example": "+33000000042"
-            },
-            "orderItems": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/orderItem"
-              }
-            },
-            "transitionLinks": {
-              "$ref": "#/definitions/orderTransitionLinks"
-            }
-          }
-        }
-      ]
-    },
-    "links.ChangeOrderLink": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/link3"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "rel": {
-              "type": "string",
-              "description": "Indicate the relation name related to the link",
-              "example": "self"
-            }
-          }
-        },
-        {
-          "example": {
-            "rel": "ShipOrder",
-            "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/ShipOrder",
-            "method": "POST",
-            "templated": true,
-            "parameters": {
-              "If-Match": {
-                "in": "header",
-                "value": "\"ca071a4580129f932a03971968ffef69\"",
-                "required": true,
-                "type": "string"
-              },
-              "testMode": {
-                "in": "query",
-                "type": "boolean",
-                "required": false,
-                "value": false
-              },
-              "userName": {
-                "in": "query",
-                "type": "string",
-                "required": true
-              },
-              "request": {
-                "in": "body",
-                "type": "object",
-                "schema": "changeOrderRequest",
-                "properties": {
-                  "order_Shipping_FulfillmentDate": {
-                    "required": true,
-                    "type": "date-time"
-                  },
-                  "order_Shipping_ShipperTrackingNumber": {
-                    "required": true,
-                    "type": "string"
-                  },
-                  "order_Shipping_CarrierName": {
-                    "required": true,
-                    "type": "string",
-                    "lovRequired": true,
-                    "lovLink": {
-                      "href": "/v2/user/PriceMinisterCarrierName"
-                    }
-                  },
-                  "order_Shipping_Method": {
-                    "required": true,
-                    "type": "string",
-                    "lovRequired": false,
-                    "lovLink": {
-                      "href": "/v2/user/ShippingMethod_PriceMinister"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "orderTransitionLinks": {
-      "description": "Contains the authorized change actions for an order",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/links.ChangeOrderLink"
-      },
-      "example": [
-        {
-          "rel": "ShipOrder",
-          "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/ShipOrder",
-          "method": "POST",
-          "templated": true,
-          "parameters": {
-            "If-Match": {
-              "in": "header",
-              "value": "\"ca071a4580129f932a03971968ffef69\"",
-              "required": true,
-              "type": "string"
-            },
-            "testMode": {
-              "in": "query",
-              "type": "boolean",
-              "required": false,
-              "value": false
-            },
-            "userName": {
-              "in": "query",
-              "type": "string",
-              "required": true
-            },
-            "request": {
-              "in": "body",
-              "type": "object",
-              "schema": "changeOrderRequest",
-              "properties": {
-                "order_Shipping_FulfillmentDate": {
-                  "required": true,
-                  "type": "date-time"
-                },
-                "order_Shipping_ShipperTrackingNumber": {
-                  "required": true,
-                  "type": "string"
-                },
-                "order_Shipping_CarrierName": {
-                  "required": true,
-                  "type": "string",
-                  "lovRequired": true,
-                  "lovLink": {
-                    "href": "/v2/user/PriceMinisterCarrierName"
-                  }
-                },
-                "order_Shipping_Method": {
-                  "required": true,
-                  "type": "string",
-                  "lovRequired": false,
-                  "lovLink": {
-                    "href": "/v2/user/ShippingMethod_PriceMinister"
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "rel": "CancelOrder",
-          "href": "/merchant/orders/v1/Amazon/1001/00000000000000000000000000000000000000000000000/CancelOrder",
-          "method": "POST",
-          "templated": true,
-          "parameters": {
-            "If-Match": {
-              "in": "header",
-              "value": "\"ca071a4580129f932a03971968ffef69\"",
-              "required": true,
-              "type": "string"
-            },
-            "testMode": {
-              "in": "query",
-              "type": "boolean",
-              "required": false,
-              "value": false
-            },
-            "userName": {
-              "in": "query",
-              "type": "string",
-              "required": true
-            },
-            "request": {
-              "in": "body",
-              "type": "object",
-              "schema": "changeOrderRequest",
-              "properties": {
-                "order_Cancel_Reason": {
-                  "required": true,
-                  "type": "string",
-                  "example": "I have a good reason"
-                }
-              }
-            }
           }
         }
       ]
     },
     "orderIndex": {
+      "type": "object",
+      "description": "Describe in details all informations related to an order.",
+      "required": [
+        "info",
+        "links",
+        "transitionLinks"
+      ],
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/orderInfo"
+        },
+        "links": {
+          "$ref": "#/definitions/orderLinks"
+        },
+        "transitionLinks": {
+          "$ref": "#/definitions/orderTransitionLinks"
+        }
+      }
+    },
+    "links.ShipOrderLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        }
+      ]
+    },
+    "links.ShipOrderWithTrackingUrlLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        }
+      ]
+    },
+    "links.RefundOrderLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        }
+      ]
+    },
+    "links.AcceptOrderLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        }
+      ]
+    },
+    "links.RefuseOrderLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        }
+      ]
+    },
+    "links.CancelOrderLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        }
+      ]
+    },
+    "orderTransitionLinks": {
+      "description": "Contains the authorized change actions for an order",
+      "type": "object",
+      "properties": {
+        "accept": {
+          "$ref": "#/definitions/links.AcceptOrderLink"
+        },
+        "refuse": {
+          "$ref": "#/definitions/links.RefuseOrderLink"
+        },
+        "cancel": {
+          "$ref": "#/definitions/links.CancelOrderLink"
+        },
+        "ship": {
+          "$ref": "#/definitions/links.ShipOrderLink"
+        },
+        "shipWithTrackingUrl": {
+          "$ref": "#/definitions/links.ShipOrderWithTrackingUrlLink"
+        },
+        "refund": {
+          "$ref": "#/definitions/links.RefundOrderLink"
+        }
+      }
+    },
+    "orderApiIndex": {
       "type": "object",
       "required": [
         "links",
@@ -3415,78 +3265,36 @@
       ],
       "properties": {
         "links": {
-          "$ref": "#/definitions/orderIndexLinks"
-        },
-        "lovLinks": {
-          "$ref": "#/definitions/orderIndexLovLinks"
+          "$ref": "#/definitions/orderApiIndexLinks"
         }
       }
     },
-    "links.GetOrderIndexLink": {
+    "links.GetOrderApiIndexLink": {
       "allOf": [
         {
           "$ref": "#/definitions/link3"
         },
         {
           "example": {
-            "href": "/merchant/orders/v1",
+            "href": "/merchant/orders/v1/MLT01",
             "method": "GET"
           }
         }
       ]
     },
-    "orderIndexLinks": {
+    "orderApiIndexLinks": {
       "description": "Gives you all entry point operations you can do on this API",
       "type": "object",
       "required": [
         "self",
-        "status",
-        "setMerchantInfos",
-        "clearMerchantInfos",
-        "export",
-        "autoTransitions",
-        "orders",
-        "lightOrders"
+        "orders"
       ],
       "properties": {
         "self": {
-          "$ref": "#/definitions/links.GetOrderIndexLink"
-        },
-        "setMerchantInfos": {
-          "$ref": "#/definitions/links.SetMerchantOrderInfoListLink"
-        },
-        "clearMerchantInfos": {
-          "$ref": "#/definitions/links.ClearMerchantOrderInfoListLink"
+          "$ref": "#/definitions/links.GetOrderApiIndexLink"
         },
         "orders": {
           "$ref": "#/definitions/links.GetOrderListFullLink"
-        },
-        "lightOrders": {
-          "$ref": "#/definitions/links.GetOrderListLightLink"
-        }
-      }
-    },
-    "orderIndexLovLinks": {
-      "description": "Gives you all the LOV to get the translations realated to operation name, codes, property names and statuses.",
-      "type": "object",
-      "required": [
-        "orderChangeBusinessOperationType",
-        "orderState",
-        "orderProperty",
-        "orderPropertyPosted"
-      ],
-      "properties": {
-        "orderChangeBusinessOperationType": {
-          "$ref": "#/definitions/LOVLink3"
-        },
-        "orderState": {
-          "$ref": "#/definitions/LOVLink3"
-        },
-        "orderProperty": {
-          "$ref": "#/definitions/LOVLink3"
-        },
-        "orderPropertyPosted": {
-          "$ref": "#/definitions/LOVLink3"
         }
       }
     },
@@ -3497,13 +3305,13 @@
         },
         {
           "example": {
-            "href": "/merchant/orders/v1/list/full",
+            "href": "/merchant/orders/v1/MLT01/list",
             "method": "POST",
             "properties": {
               "Accept-Encoding": {
                 "in": "header",
                 "required": true,
-                "type": "â€‹array",
+                "type": "â€‹string",
                 "schema": "string"
               },
               "request": {
@@ -3517,31 +3325,11 @@
         }
       ]
     },
-    "links.GetOrderListLightLink": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/link3"
-        },
-        {
-          "example": {
-            "href": "/merchant/orders/v1/list/light",
-            "method": "POST",
-            "properties": {
-              "request": {
-                "in": "body",
-                "required": false,
-                "type": "object",
-                "schema": "orderListRequest"
-              }
-            }
-          }
-        }
-      ]
-    },
-    "orderListLinks": {
-      "description": "The list of actions you can do from the order list response",
+    "orderListFullLinks": {
       "type": "object",
+      "description": "The list of actions you can do from the order list response",
       "required": [
+        "self",
         "setMerchantInfos",
         "clearMerchantInfos"
       ],
@@ -3551,54 +3339,11 @@
         },
         "clearMerchantInfos": {
           "$ref": "#/definitions/links.ClearMerchantOrderInfoListLink"
+        },
+        "self": {
+          "$ref": "#/definitions/links.GetOrderListFullLink"
         }
       }
-    },
-    "orderListLightLinks": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/orderListLinks"
-        },
-        {
-          "type": "object",
-          "required": [
-            "self",
-            "harvest",
-            "setMerchantInfos",
-            "clearMerchantInfos",
-            "export",
-            "status"
-          ],
-          "properties": {
-            "self": {
-              "$ref": "#/definitions/links.GetOrderListLightLink"
-            }
-          }
-        }
-      ]
-    },
-    "orderListFullLinks": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/orderListLinks"
-        },
-        {
-          "type": "object",
-          "required": [
-            "self",
-            "harvest",
-            "setMerchantInfos",
-            "clearMerchantInfos",
-            "export",
-            "status"
-          ],
-          "properties": {
-            "self": {
-              "$ref": "#/definitions/links.GetOrderListFullLink"
-            }
-          }
-        }
-      ]
     },
     "links.SetMerchantOrderInfoListLink": {
       "allOf": [
@@ -3634,34 +3379,12 @@
         }
       ]
     },
-    "orderListLight": {
-      "description": "The order list with minimum information we have from the orders.\\\nThe paginationResult properties can be null if the list is empty.\n",
-      "type": "object",
-      "required": [
-        "orders",
-        "links"
-      ],
-      "properties": {
-        "paginationResult": {
-          "$ref": "#/definitions/paginationResult"
-        },
-        "orders": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/orderHeader"
-          }
-        },
-        "links": {
-          "$ref": "#/definitions/orderListLightLinks"
-        }
-      }
-    },
     "orderListFull": {
       "description": "The order list with all information we have from the orders and its items.\\\nThe paginationResult properties can be null if the list is empty.\n",
       "type": "object",
       "required": [
-        "orders",
-        "links"
+        "links",
+        "orders"
       ],
       "properties": {
         "paginationResult": {
@@ -3669,8 +3392,10 @@
         },
         "orders": {
           "type": "array",
+          "description": "The order index list, this list can be empty if there is no result",
+          "minimum": 0,
           "items": {
-            "$ref": "#/definitions/order"
+            "$ref": "#/definitions/orderIndex"
           }
         },
         "links": {
@@ -3678,25 +3403,12 @@
         }
       }
     },
-    "imnOrderStatus": {
-      "type": "string",
-      "description": "IMN order status. Unified for all marketplaces.",
-      "example": "Shipped",
-      "x-lov": "IMNOrderState"
-    },
-    "marketplaceOrderStatus": {
-      "description": "The marketplace order state",
-      "type": "string",
-      "example": "In_progress_3"
-    },
-    "marketplaceOrderId": {
-      "description": "The order marketplace identifier",
-      "type": "string",
-      "example": "AMAZON12345"
-    },
     "orderHistory": {
       "description": "Describe the history related to an order",
       "type": "object",
+      "required": [
+        "changeOrderReportings"
+      ],
       "properties": {
         "changeOrderReportings": {
           "description": "The list of change order operation",
@@ -3711,33 +3423,30 @@
         }
       }
     },
-    "sourceType": {
-      "description": "Indicates the origin of the operation",
-      "type": "string",
-      "enum": [
-        "Api",
-        "Go"
-      ],
-      "example": "Api"
-    },
-    "executionUUID": {
-      "description": "The execution identifier",
-      "format": "uuid",
-      "type": "string",
-      "example": "8D4176FA78D5A7Fffa91e9edc694ec5858be9a1b109507c"
-    },
     "changeOrderReporting": {
       "description": "The reporting related to a change order operation",
       "type": "object",
+      "required": [
+        "correlationId",
+        "changeType",
+        "sourceType",
+        "sourceUserId",
+        "sourceUserName",
+        "creationUtcDate",
+        "processingStatus",
+        "lastUpdateUtcDate",
+        "ipAddress",
+        "testMode"
+      ],
       "properties": {
-        "executionUUID": {
-          "$ref": "#/definitions/executionUUID"
+        "correlationId": {
+          "$ref": "#/definitions/correlationId"
         },
-        "changeOrderType": {
-          "$ref": "#/definitions/businessOperationType"
+        "changeType": {
+          "$ref": "#/definitions/orderChangeType"
         },
         "sourceType": {
-          "$ref": "#/definitions/sourceType"
+          "$ref": "#/definitions/operationSourceType"
         },
         "sourceUserId": {
           "$ref": "#/definitions/userId"
@@ -3753,9 +3462,7 @@
           "example": "2017-04-01T13:10:03Z"
         },
         "processingStatus": {
-          "description": "The processing status of the execution",
-          "type": "string",
-          "example": "Done"
+          "$ref": "#/definitions/processingStatus"
         },
         "lastUpdateUtcDate": {
           "description": "The last update UTC date of the execution",
@@ -3786,72 +3493,73 @@
         }
       }
     },
-    "changeOrderListRequest": {
+    "refundOrderRequest": {
       "type": "object",
-      "description": "Contains all change order operations you want to make",
+      "description": "The refund order parameters",
       "required": [
-        "changeOrders"
+        "refundReason"
       ],
       "properties": {
-        "changeOrders": {
-          "type": "array",
-          "description": "The change order operations",
-          "minLength": 1,
-          "maxLength": 100,
-          "items": {
-            "$ref": "#/definitions/changeOrderListRequestItem"
-          }
+        "refundReason": {
+          "$ref": "#/definitions/refundReason"
         }
       }
     },
-    "changeOrderListRequestItem": {
+    "cancelOrderRequest": {
       "type": "object",
-      "description": "Contains the order identifier and the change order request",
+      "description": "The cancel order parameters",
       "required": [
-        "order"
+        "cancellationReason"
       ],
       "properties": {
-        "order": {
-          "$ref": "#/definitions/orderIdentifierWithETag"
-        },
-        "changeOrderRequest": {
-          "$ref": "#/definitions/changeOrderRequest"
+        "cancellationReason": {
+          "$ref": "#/definitions/cancellationReason"
         }
       }
     },
-    "orderIdentifierWithETag": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/orderIdentifier"
-        },
-        {
-          "type": "object",
-          "required": [
-            "marketplaceCode",
-            "merchantCode",
-            "imnOrderId",
-            "etag"
-          ],
-          "properties": {
-            "etag": {
-              "$ref": "#/definitions/etag"
-            }
-          }
-        }
-      ]
-    },
-    "changeOrderRequest": {
+    "shipOrderRequest": {
       "type": "object",
-      "description": "All properties with the prefix order_ are translated in the list of values /user/lov#OrderMetaInfoPosted",
-      "additionalProperties": {
-        "type": "string"
+      "description": "The ship order parameters",
+      "required": [
+        "trackingNumber",
+        "carrierCode"
+      ],
+      "properties": {
+        "trackingNumber": {
+          "$ref": "#/definitions/trackingNumber"
+        },
+        "carrierCode": {
+          "$ref": "#/definitions/carrierCode"
+        }
       },
       "example": {
-        "order_Shipping_ShipperTrackingNumber": "1H01845163783",
-        "order_Shipping_ShippingUrl": "https://trackingpackage.com?number=1H01845163783",
-        "order_Shipping_CarrierName": "La poste",
-        "order_Shipping_FulfillmentDate": "2014-09-23T09:58:00Z",
-        "order_Shipping_EstimatedDeliveryDate": "2014-09-24T09:58:00Z"
+        "trackingNumber": "1H01845163783",
+        "carrierCode": "MondialRelay"
+      }
+    },
+    "shipOrderWithTrackingUrlRequest": {
+      "type": "object",
+      "description": "The ship order parameters for an unidentified carrier in the carrierCode enum",
+      "required": [
+        "carrierName",
+        "trackingNumber",
+        "trackingUrl"
+      ],
+      "properties": {
+        "carrierName": {
+          "$ref": "#/definitions/carrierName"
+        },
+        "trackingNumber": {
+          "$ref": "#/definitions/trackingNumber"
+        },
+        "trackingUrl": {
+          "$ref": "#/definitions/trackingUrl"
+        }
+      },
+      "example": {
+        "carrierName": "My special carrier name",
+        "trackingNumber": "1H01845163783",
+        "shippingUrl": "https://trackingpackage.com?number=1H01845163783"
       }
     },
     "batchOrderOperationResponse": {
@@ -3911,9 +3619,6 @@
         "targetUrl": {
           "$ref": "#/definitions/httpUrl"
         },
-        "eventTypes": {
-          "$ref": "#/definitions/subscriptionOrderEventTypeList"
-        },
         "name": {
           "$ref": "#/definitions/subscriptionName"
         },
@@ -3924,20 +3629,6 @@
           "$ref": "#/definitions/subscriptionApplicationVersion"
         }
       }
-    },
-    "subscriptionOrderEventTypeList": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/orderEventType"
-      },
-      "default": [
-        "order.created",
-        "order.updated"
-      ],
-      "example": [
-        "order.created",
-        "order.updated"
-      ]
     },
     "subscriptionName": {
       "type": "string",
@@ -3961,7 +3652,6 @@
       "required": [
         "id",
         "targetUrl",
-        "eventTypes",
         "status",
         "name",
         "applicationName",
@@ -3976,9 +3666,6 @@
         },
         "targetUrl": {
           "$ref": "#/definitions/httpUrl"
-        },
-        "eventTypes": {
-          "$ref": "#/definitions/subscriptionOrderEventTypeList"
         },
         "name": {
           "$ref": "#/definitions/subscriptionName"
@@ -3999,17 +3686,314 @@
       "type": "string",
       "description": "The status of your subscription",
       "enum": [
-        "active",
-        "inactive"
+        "Active",
+        "Inactive"
       ]
     },
-    "orderEventType": {
-      "type": "string",
-      "description": "The event type you can subscribe to",
-      "enum": [
-        "order.created",
-        "order.updated"
-      ]
+    "shipOrderListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/shipOrderListRequestItem"
+          }
+        }
+      }
+    },
+    "shipOrderListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "request",
+        "etag"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "request": {
+          "$ref": "#/definitions/shipOrderRequest"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        }
+      }
+    },
+    "shipOrderWithTrackingUrlListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/shipOrderWithTrackingUrlListRequestItem"
+          }
+        }
+      }
+    },
+    "shipOrderWithTrackingUrlListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "request",
+        "etag"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "request": {
+          "$ref": "#/definitions/shipOrderWithTrackingUrlRequest"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        }
+      }
+    },
+    "refundOrderListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/refundOrderListRequestItem"
+          }
+        }
+      }
+    },
+    "refundOrderListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "request",
+        "etag"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "request": {
+          "$ref": "#/definitions/refundOrderRequest"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        }
+      }
+    },
+    "cancelOrderListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/cancelOrderListRequestItem"
+          }
+        }
+      }
+    },
+    "cancelOrderListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "request",
+        "etag"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "request": {
+          "$ref": "#/definitions/cancelOrderRequest"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        }
+      }
+    },
+    "acceptOrderListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/acceptOrderListRequestItem"
+          }
+        }
+      }
+    },
+    "acceptOrderListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "etag"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        }
+      }
+    },
+    "refuseOrderListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/refuseOrderListRequestItem"
+          }
+        }
+      }
+    },
+    "refuseOrderListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "etag"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "etag": {
+          "$ref": "#/definitions/orderEtag"
+        }
+      }
+    },
+    "clearMerchantOrderInfoListRequest": {
+      "type": "object",
+      "required": [
+        "orders"
+      ],
+      "properties": {
+        "orders": {
+          "type": "array",
+          "maxItems": 100,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/clearMerchantOrderInfoListRequestItem"
+          }
+        }
+      }
+    },
+    "clearMerchantOrderInfoListRequestItem": {
+      "type": "object",
+      "required": [
+        "order"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        }
+      }
+    },
+    "setMerchantOrderInfoListRequest": {
+      "type": "object",
+      "required": [
+        "merchantECommerceSoftwareName",
+        "merchantECommerceSoftwareVersion",
+        "orders"
+      ],
+      "properties": {
+        "merchantECommerceSoftwareName": {
+          "$ref": "#/definitions/ecommerceSoftwareName"
+        },
+        "merchantECommerceSoftwareVersion": {
+          "$ref": "#/definitions/merchantECommerceSoftwareVersion"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/setMerchantOrderInfoListRequestItem"
+          },
+          "maxItems": 100,
+          "uniqueItems": true,
+          "minItems": 1,
+          "example": [
+            {
+              "order": {
+                "marketplaceCode": "C1",
+                "merchantCode": "MLT01",
+                "marketplaceOrderId": "X0CD8FG"
+              },
+              "merchantOrderId": "BX1234"
+            }
+          ]
+        }
+      }
+    },
+    "setMerchantOrderInfoListRequestItem": {
+      "type": "object",
+      "required": [
+        "order",
+        "merchantOrderId"
+      ],
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/orderIdentifier"
+        },
+        "merchantOrderId": {
+          "$ref": "#/definitions/merchantOrderId"
+        }
+      }
+    },
+    "setMerchantOrderInfoRequest": {
+      "type": "object",
+      "required": [
+        "merchantOrderId",
+        "merchantECommerceSoftwareName",
+        "merchantECommerceSoftwareVersion"
+      ],
+      "properties": {
+        "merchantOrderId": {
+          "$ref": "#/definitions/merchantOrderId"
+        },
+        "merchantECommerceSoftwareName": {
+          "$ref": "#/definitions/ecommerceSoftwareName"
+        },
+        "merchantECommerceSoftwareVersion": {
+          "$ref": "#/definitions/merchantECommerceSoftwareVersion"
+        }
+      }
     },
     "userLovIndex": {
       "type": "object",
@@ -4849,6 +4833,32 @@
         }
       ]
     },
+    "imnOrderStatus": {
+      "type": "string",
+      "description": "IMN order status. Unified for all marketplaces.",
+      "example": "shipped",
+      "x-lov": "imnOrderStatus",
+      "enum": [
+        "New",
+        "Pending",
+        "InProgress",
+        "Received",
+        "Shipped",
+        "Cancelled",
+        "Closed",
+        "AvailableOnStore"
+      ]
+    },
+    "marketplaceOrderStatus": {
+      "description": "The marketplace order state",
+      "type": "string",
+      "example": "In_progress_3"
+    },
+    "marketplaceOrderId": {
+      "description": "The order marketplace identifier",
+      "type": "string",
+      "example": "CDISCOUNT12345"
+    },
     "orderChangeUserName": {
       "type": "string",
       "description": "The name of the user who did the order change"
@@ -4882,6 +4892,25 @@
       "description": "If true, there is currently a harvest or an order change in progress. Otherwise false.",
       "type": "boolean",
       "example": false
+    },
+    "orderIdentifier": {
+      "type": "object",
+      "required": [
+        "marketplaceCode",
+        "merchantCode",
+        "marketplaceOrderId"
+      ],
+      "properties": {
+        "marketplaceCode": {
+          "$ref": "#/definitions/marketplaceCode"
+        },
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "marketplaceOrderId": {
+          "$ref": "#/definitions/marketplaceOrderId"
+        }
+      }
     },
     "carrierName": {
       "type": "string",
@@ -5000,6 +5029,70 @@
       "description": "The key correspond to the order item identifier. Must be unique.",
       "additionalProperties": {
         "$ref": "#/definitions/orderItem"
+      }
+    },
+    "orderItem": {
+      "description": "Describe an order item.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "The title of the order item",
+          "example": "bLA acide-plomb 6v-4.5ah 70x48x106mm",
+          "type": "string"
+        },
+        "condition": {
+          "description": "The condition of the order item",
+          "example": "new",
+          "type": "string"
+        },
+        "imageUrl": {
+          "$ref": "#/definitions/httpUrl",
+          "example": "http://blabla.com//das6-45.jpg"
+        },
+        "merchantOfferSku": {
+          "$ref": "#/definitions/sku"
+        },
+        "gtin": {
+          "$ref": "#/definitions/gtin"
+        },
+        "marketplaceProductId": {
+          "description": "The marketplace product identifier of the order item",
+          "example": "MarketplaceProductId",
+          "type": "string"
+        },
+        "marketplaceProductUrl": {
+          "$ref": "#/definitions/httpUrl"
+        },
+        "itemPrice": {
+          "description": "The price of the order item",
+          "example": 6.86,
+          "type": "number",
+          "format": "decimal"
+        },
+        "itemTax": {
+          "description": "The tax of the order item",
+          "type": "number",
+          "format": "decimal",
+          "example": 0.0
+        },
+        "quantity": {
+          "description": "The quantity of the order item",
+          "example": 1,
+          "type": "number",
+          "format": "decimal"
+        },
+        "shippingPrice": {
+          "description": "The shipping price of the order item",
+          "type": "number",
+          "example": 0.0,
+          "format": "decimal"
+        },
+        "totalPrice": {
+          "description": "The total price of the order item",
+          "example": 6.86,
+          "type": "number",
+          "format": "decimal"
+        }
       }
     },
     "orderBillingInfo": {
@@ -7082,6 +7175,33 @@
         }
       }
     },
+    "dependencyProjectionException": {
+      "x-format": "Exception",
+      "x-transient": false,
+      "x-technical": true,
+      "type": "object",
+      "required": [
+        "merchantCode",
+        "projectionType",
+        "projectionMessageId",
+        "currentMessageId"
+      ],
+      "description": "Projection '{projectionType}' ('{projectionMessageId}') failed for merchantCode '{merchantCode}'. Current messageId is '{currentMessageId}'\n",
+      "properties": {
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
+        },
+        "projectionType": {
+          "type": "string"
+        },
+        "projectionMessageId": {
+          "$ref": "#/definitions/messageId"
+        },
+        "currentMessageId": {
+          "$ref": "#/definitions/messageId"
+        }
+      }
+    },
     "marketplaceSubscriptionStatus": {
       "description": "The subscription status",
       "type": "string",
@@ -7577,6 +7697,28 @@
           "$ref": "#/definitions/pageNumber"
         }
       }
+    },
+    "pageSize": {
+      "x-exclude": true,
+      "description": "Indicate the item count per page",
+      "type": "integer",
+      "format": "int32",
+      "default": 100,
+      "minimum": 25,
+      "x-minimum": 25,
+      "maximum": 100,
+      "x-maximum": 100,
+      "example": 100
+    },
+    "pageNumber": {
+      "x-exclude": true,
+      "description": "Indicates the page number",
+      "format": "int32",
+      "type": "integer",
+      "example": 1,
+      "minimum": 1,
+      "x-minimum": 1,
+      "default": 1
     },
     "productFilterOperatorName": {
       "type": "string",
@@ -8577,13 +8719,14 @@
       ]
     },
     {
-      "name": "Marketplaces - Orders",
+      "name": "Merchant - Orders",
       "tags": [
-        "Marketplaces - Orders - Global",
-        "Marketplaces - Orders - List",
-        "Marketplaces - Orders - Order",
-        "Marketplaces - Orders - Batches",
-        "Marketplaces - Orders - Subscriptions"
+        "Merchant - Orders - Global",
+        "Merchant - Orders - List",
+        "Merchant - Orders - Order",
+        "Merchant - Orders - Batches",
+        "Merchant - Orders - Subscriptions - DRAFT",
+        "Merchant - Orders - Statistics"
       ]
     },
     {
@@ -8599,153 +8742,19 @@
       ]
     }
   ],
-  "parameters": {
-    "imnOrderIdParameter": {
-      "description": "The IMN Order identifier",
-      "name": "imnOrderId",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "format": "uuid",
-      "x-example": "00000000000000000000000000000000000000000000000"
-    },
-    "changeOrderTypeParameter": {
-      "description": "The Order change type",
-      "name": "changeOrderType",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "x-lov": "OrderChangeBusinessOperationType"
-    },
-    "userNameInQueryParameter": {
-      "name": "userName",
-      "description": "Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
-      "in": "query",
-      "required": true,
-      "type": "string"
-    },
-    "testModeInQueryParameter": {
-      "name": "testMode",
-      "description": "If true, the operation will be not be sent to marketplace. But the validation will be taken in account.",
-      "in": "query",
-      "required": false,
-      "type": "boolean",
-      "default": false,
-      "x-example": false
-    },
-    "marketplaceOrderIdParameter": {
-      "description": "The MKP Order identifier",
-      "name": "marketplaceOrderId",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "format": "marketplaceOrderId",
-      "x-example": "CDISCOUNT12345"
-    },
-    "correlationIdParameter": {
-      "name": "correlationId",
-      "in": "path",
-      "type": "string",
-      "format": "CorrelationId",
-      "required": true,
-      "description": "It's the guid corresponding to the operation.\n"
-    },
-    "pageNumberQueryStringParameter": {
-      "name": "pageNumber",
-      "description": "The page number you want to get",
-      "in": "query",
-      "required": true,
-      "type": "integer",
-      "format": "int32",
-      "minimum": 1,
-      "x-minimum": 1,
-      "x-example": 1
-    },
-    "pageSizeQueryStringParameter": {
-      "name": "pageSize",
-      "description": "The entry count you want to get",
-      "in": "query",
-      "required": true,
-      "type": "integer",
-      "format": "int32",
-      "minimum": 25,
-      "x-minimum": 25,
-      "maximum": 100,
-      "x-maximum": 100,
-      "x-example": 25
-    },
-    "ifNoneMatchParameter": {
-      "name": "If-None-Match",
-      "type": "string",
-      "in": "header",
-      "required": false,
-      "description": "ETag value to identify the last known version of requested resource.\\\nTo avoid useless exchange, we recommend you to indicate the ETag you previously got from this operation.\\\nIf the ETag value does not match the response will be 200 to give you a new content, otherwise the response will be: 304 Not Modified, without any content.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
-    },
-    "ifMatchParameter": {
-      "name": "If-Match",
-      "in": "header",
-      "type": "string",
-      "required": true,
-      "description": "ETag value to identify the last known version of requested resource.\\\nTo ensure that you are making a change on the lastest version of the resource.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
-    },
-    "acceptLanguageParameter": {
-      "name": "Accept-Language",
-      "description": "Indicates that the client accepts the following languages.",
-      "in": "header",
-      "required": false,
-      "type": "array",
-      "collectionFormat": "csv",
-      "items": {
-        "type": "string"
-      }
-    },
-    "acceptEncodingRequiredParameter": {
-      "name": "Accept-Encoding",
-      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
-      "in": "header",
-      "required": true,
-      "type": "array",
-      "collectionFormat": "csv",
-      "items": {
-        "type": "string"
-      }
-    },
-    "acceptEncodingOptionalParameter": {
-      "name": "Accept-Encoding",
-      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
-      "in": "header",
-      "required": false,
-      "type": "array",
-      "collectionFormat": "csv",
-      "items": {
-        "type": "string"
-      }
-    },
-    "walletPropertyCodeParameter": {
-      "name": "walletPropertyCode",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The wallet document code"
-    },
-    "marketplaceCodeParameter": {
-      "format": "MarketplaceCode",
-      "name": "marketplaceCode",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The marketplace code"
-    },
-    "merchantCodeParameter": {
-      "format": "MerchantCode",
-      "name": "merchantCode",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The merchant code"
-    }
-  },
   "responses": {
+    "orderMerchantInfoBatchOperationResponse": {
+      "description": "Succesfully or partially processed operations.\nIn the response, you will see the status per operation.\n",
+      "schema": {
+        "$ref": "#/definitions/batchOrderOperationResponse"
+      }
+    },
+    "orderChangeBatchOperationResponse": {
+      "description": "Succesfully or partially processed operations.\nIn the response, you will see the status per operation.\n\nFor each operation succeed:\n- the operation will be fowarded to the marketplace\n- that does not mean that marketplace will validate your operation.\n",
+      "schema": {
+        "$ref": "#/definitions/batchOrderOperationResponse"
+      }
+    },
     "orderBatchBadRequest": {
       "description": "In case there is an error like:\n- ValidationException\n- DuplicateOrderOperationException\n- InvalidMerchantCodeException\n- OrderManagementDisabledException\n",
       "x-exceptions": [
@@ -8916,6 +8925,135 @@
       "schema": {
         "$ref": "#/definitions/userErrorMessage"
       }
+    }
+  },
+  "parameters": {
+    "marketplaceOrderIdParameter": {
+      "description": "The MKP Order identifier",
+      "name": "marketplaceOrderId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "format": "marketplaceOrderId",
+      "x-example": "CDISCOUNT12345"
+    },
+    "userNameInQueryParameter": {
+      "name": "userName",
+      "description": "Sometimes the user in the e-commerce application is not the same as user associated with the current subscription key. We recommend providing your application's user login.",
+      "in": "query",
+      "required": true,
+      "type": "string"
+    },
+    "testModeInQueryParameter": {
+      "name": "testMode",
+      "description": "If true, the operation will be not be sent to marketplace. But the validation will be taken in account.",
+      "in": "query",
+      "required": false,
+      "type": "boolean",
+      "default": false,
+      "x-example": false
+    },
+    "correlationIdParameter": {
+      "name": "correlationId",
+      "in": "path",
+      "type": "string",
+      "format": "CorrelationId",
+      "required": true,
+      "description": "It's the guid corresponding to the operation.\n"
+    },
+    "pageNumberQueryStringParameter": {
+      "name": "pageNumber",
+      "description": "The page number you want to get",
+      "in": "query",
+      "required": true,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "x-minimum": 1,
+      "x-example": 1
+    },
+    "pageSizeQueryStringParameter": {
+      "name": "pageSize",
+      "description": "The entry count you want to get",
+      "in": "query",
+      "required": true,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 25,
+      "x-minimum": 25,
+      "maximum": 100,
+      "x-maximum": 100,
+      "x-example": 25
+    },
+    "ifNoneMatchParameter": {
+      "name": "If-None-Match",
+      "type": "string",
+      "in": "header",
+      "required": false,
+      "description": "ETag value to identify the last known version of requested resource.\\\nTo avoid useless exchange, we recommend you to indicate the ETag you previously got from this operation.\\\nIf the ETag value does not match the response will be 200 to give you a new content, otherwise the response will be: 304 Not Modified, without any content.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+    },
+    "ifMatchParameter": {
+      "name": "If-Match",
+      "in": "header",
+      "type": "string",
+      "required": true,
+      "description": "ETag value to identify the last known version of requested resource.\\\nTo ensure that you are making a change on the lastest version of the resource.\\\nFor more details go to this link: http://tools.ietf.org/html/rfc7232#section-2.3\n"
+    },
+    "acceptLanguageParameter": {
+      "name": "Accept-Language",
+      "description": "Indicates that the client accepts the following languages.",
+      "in": "header",
+      "required": false,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptEncodingRequiredParameter": {
+      "name": "Accept-Encoding",
+      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
+      "in": "header",
+      "required": true,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptEncodingOptionalParameter": {
+      "name": "Accept-Encoding",
+      "description": "Allows the client to indicate wether it accepts a compressed encoding to reduce traffic size.",
+      "in": "header",
+      "required": false,
+      "type": "array",
+      "collectionFormat": "csv",
+      "items": {
+        "type": "string"
+      }
+    },
+    "walletPropertyCodeParameter": {
+      "name": "walletPropertyCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The wallet document code"
+    },
+    "marketplaceCodeParameter": {
+      "format": "MarketplaceCode",
+      "name": "marketplaceCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The marketplace code"
+    },
+    "merchantCodeParameter": {
+      "format": "MerchantCode",
+      "name": "merchantCode",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The merchant code"
     }
   }
 }
