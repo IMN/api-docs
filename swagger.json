@@ -4171,7 +4171,10 @@
       "type": "object",
       "required": [
         "order",
-        "merchantInfo"
+        "merchantInfo",
+        "userId",
+        "userEmail",
+        "userIPAddress"
       ],
       "properties": {
         "order": {
@@ -4179,6 +4182,17 @@
         },
         "merchantInfo": {
           "$ref": "#/definitions/orderMerchantInfo"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "description": "The IP address who request this operation",
+          "type": "string",
+          "example": "127.0.0.1"
         }
       }
     },
@@ -4186,11 +4200,25 @@
       "x-format": "Event",
       "type": "object",
       "required": [
-        "order"
+        "order",
+        "userId",
+        "userEmail",
+        "userIPAddress"
       ],
       "properties": {
         "order": {
           "$ref": "#/definitions/orderIdentifier"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "description": "The IP address who request this operation",
+          "type": "string",
+          "example": "127.0.0.1"
         }
       }
     },
@@ -4204,7 +4232,8 @@
             "order",
             "userId",
             "userName",
-            "ipAddress",
+            "userEmail",
+            "userIPAddress",
             "testMode",
             "sourceType",
             "eventType"
@@ -4219,7 +4248,10 @@
             "userName": {
               "$ref": "#/definitions/orderChangeUserName"
             },
-            "ipAddress": {
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
               "description": "The IP address who request this operation",
               "type": "string",
               "example": "127.0.0.1"
@@ -4268,9 +4300,10 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "carrierCode",
             "trackingNumber",
-            "ipAddress",
             "testMode",
             "sourceType"
           ],
@@ -4297,10 +4330,11 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "carrierName",
             "trackingNumber",
             "trackingUrl",
-            "ipAddress",
             "testMode",
             "sourceType"
           ],
@@ -4330,8 +4364,9 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "refundReason",
-            "ipAddress",
             "testMode",
             "sourceType"
           ],
@@ -4355,8 +4390,9 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "cancellationReason",
-            "ipAddress",
             "testMode",
             "sourceType"
           ],
@@ -4411,7 +4447,10 @@
       "type": "object",
       "required": [
         "order",
-        "merchantInfo"
+        "merchantInfo",
+        "userId",
+        "userEmail",
+        "userIPAddress"
       ],
       "properties": {
         "order": {
@@ -4419,6 +4458,17 @@
         },
         "merchantInfo": {
           "$ref": "#/definitions/orderMerchantInfo"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "description": "The IP address who request this operation",
+          "type": "string",
+          "example": "127.0.0.1"
         }
       }
     },
@@ -4426,11 +4476,25 @@
       "x-format": "Command",
       "type": "object",
       "required": [
-        "order"
+        "order",
+        "userId",
+        "userEmail",
+        "userIPAddress"
       ],
       "properties": {
         "order": {
           "$ref": "#/definitions/orderIdentifier"
+        },
+        "userId": {
+          "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "description": "The IP address who request this operation",
+          "type": "string",
+          "example": "127.0.0.1"
         }
       }
     },
@@ -4441,7 +4505,8 @@
         "order",
         "userId",
         "userName",
-        "ipAddress",
+        "userEmail",
+        "userIPAddress",
         "testMode",
         "sourceType",
         "etag"
@@ -4456,7 +4521,10 @@
         "userName": {
           "$ref": "#/definitions/orderChangeUserName"
         },
-        "ipAddress": {
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
           "description": "The IP address who request this operation",
           "type": "string",
           "example": "127.0.0.1"
@@ -4486,7 +4554,8 @@
             "order",
             "userId",
             "userName",
-            "ipAddress",
+            "userEmail",
+            "userIPAddress",
             "testMode",
             "sourceType",
             "etag"
@@ -4511,7 +4580,8 @@
             "order",
             "userId",
             "userName",
-            "ipAddress",
+            "userEmail",
+            "userIPAddress",
             "testMode",
             "sourceType",
             "etag"
@@ -4536,9 +4606,10 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "carrierCode",
             "trackingNumber",
-            "ipAddress",
             "testMode",
             "sourceType",
             "etag"
@@ -4569,10 +4640,11 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "carrierName",
             "trackingNumber",
             "trackingUrl",
-            "ipAddress",
             "testMode",
             "sourceType",
             "etag"
@@ -4606,8 +4678,9 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "refundReason",
-            "ipAddress",
             "testMode",
             "sourceType",
             "etag"
@@ -4635,8 +4708,9 @@
             "order",
             "userId",
             "userName",
+            "userEmail",
+            "userIPAddress",
             "cancellationReason",
-            "ipAddress",
             "testMode",
             "sourceType",
             "etag"
@@ -5900,6 +5974,9 @@
         },
         "email": {
           "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "type": "string"
         }
       }
     },
@@ -5918,11 +5995,17 @@
         "currencyCode"
       ],
       "properties": {
-        "merchantCode": {
-          "$ref": "#/definitions/merchantCode"
-        },
         "userId": {
           "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "type": "string"
+        },
+        "merchantCode": {
+          "$ref": "#/definitions/merchantCode"
         },
         "companyName": {
           "$ref": "#/definitions/merchantCompanyName"
@@ -5992,6 +6075,12 @@
             },
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6017,6 +6106,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "externalId": {
               "type": "string",
@@ -6046,6 +6141,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6072,6 +6173,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "reason": {
               "$ref": "#/definitions/merchantMarketplaceSubscriptionRefusalReason"
@@ -6102,6 +6209,12 @@
             "userId": {
               "$ref": "#/definitions/userId"
             },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
+            },
             "reason": {
               "$ref": "#/definitions/merchantMarketplaceSubscriptionRefusalReason"
             }
@@ -6128,6 +6241,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6152,6 +6271,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6176,6 +6301,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6200,6 +6331,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6224,6 +6361,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6248,6 +6391,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6272,6 +6421,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6296,6 +6451,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6319,6 +6480,12 @@
         },
         "userId": {
           "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "type": "string"
         },
         "sourceMarketplaceCode": {
           "$ref": "#/definitions/marketplaceCode"
@@ -6364,6 +6531,12 @@
             "userId": {
               "$ref": "#/definitions/userId"
             },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
+            },
             "ruleType": {
               "$ref": "#/definitions/marketplacePricingRuleType"
             },
@@ -6394,6 +6567,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "ruleType": {
               "$ref": "#/definitions/marketplacePreparationRuleType"
@@ -6428,6 +6607,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "deliveryMethod": {
               "$ref": "#/definitions/deliveryMethod"
@@ -6468,6 +6653,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6493,6 +6684,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "deliveryMethod": {
               "$ref": "#/definitions/deliveryMethod"
@@ -6520,6 +6717,12 @@
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6546,6 +6749,12 @@
             "userId": {
               "$ref": "#/definitions/userId"
             },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
+            },
             "marketplaceMerchantCode": {
               "$ref": "#/definitions/marketplaceMerchantCode"
             }
@@ -6567,7 +6776,8 @@
         "country",
         "phoneNumber",
         "currencyCode",
-        "ecommerceSoftwareName"
+        "ecommerceSoftwareName",
+        "userIPAddress"
       ],
       "properties": {
         "merchantCode": {
@@ -6602,6 +6812,9 @@
         },
         "ecommerceSoftwareName": {
           "$ref": "#/definitions/ecommerceSoftwareName"
+        },
+        "userIPAddress": {
+          "type": "string"
         }
       }
     },
@@ -6612,6 +6825,8 @@
       "required": [
         "merchantCode",
         "userId",
+        "userEmail",
+        "userIPAddress",
         "companyName",
         "lastName",
         "firstName",
@@ -6626,6 +6841,12 @@
         },
         "userId": {
           "$ref": "#/definitions/userId"
+        },
+        "userEmail": {
+          "$ref": "#/definitions/email"
+        },
+        "userIPAddress": {
+          "type": "string"
         },
         "companyName": {
           "$ref": "#/definitions/merchantCompanyName"
@@ -6665,11 +6886,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6687,11 +6916,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6709,11 +6946,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6731,6 +6976,8 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode",
             "reason"
           ],
@@ -6740,6 +6987,12 @@
             },
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6757,6 +7010,8 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode",
             "reason"
           ],
@@ -6766,6 +7021,12 @@
             },
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6782,6 +7043,8 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode",
             "credential"
           ],
@@ -6791,6 +7054,12 @@
             },
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6807,11 +7076,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6828,11 +7105,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6849,11 +7134,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6870,11 +7163,19 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             }
           }
         }
@@ -6891,12 +7192,20 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode",
             "pricingSetting"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "pricingSetting": {
               "$ref": "#/definitions/marketplacePricingSetting"
@@ -6916,12 +7225,20 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode",
             "shippingSettings"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "shippingSettings": {
               "$ref": "#/definitions/marketplaceShippingSettings"
@@ -6943,11 +7260,19 @@
             "merchantCode",
             "marketplaceCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "deliveryMethod"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "deliveryMethod": {
               "$ref": "#/definitions/deliveryMethod"
@@ -6969,11 +7294,19 @@
             "merchantCode",
             "marketplaceCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "deliveryMethod"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "deliveryMethod": {
               "$ref": "#/definitions/deliveryMethod"
@@ -6993,12 +7326,20 @@
           "required": [
             "merchantCode",
             "userId",
+            "userEmail",
+            "userIPAddress",
             "marketplaceCode",
             "marketplaceMerchantCode"
           ],
           "properties": {
             "userId": {
               "$ref": "#/definitions/userId"
+            },
+            "userEmail": {
+              "$ref": "#/definitions/email"
+            },
+            "userIPAddress": {
+              "type": "string"
             },
             "marketplaceMerchantCode": {
               "$ref": "#/definitions/marketplaceMerchantCode"
@@ -7804,8 +8145,8 @@
       "description": "The email",
       "type": "string",
       "format": "email",
-      "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-      "x-pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+      "pattern": "^(.+)@(.+)$",
+      "x-pattern": "^(.+)@(.+)$",
       "example": "paulsimon@mysupercompany.com"
     },
     "userId": {
