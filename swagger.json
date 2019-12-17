@@ -29,6 +29,10 @@
   ],
   "tags": [
     {
+      "name": "Merchant API - Operations - Global",
+      "x-displayName": "Global"
+    },
+    {
       "name": "Merchant API - Marketplaces - Global",
       "x-displayName": "Global"
     },
@@ -102,6 +106,53 @@
     }
   ],
   "paths": {
+    "/merchant/operations/v1/{merchantCode}/{operationId}": {
+      "get": {
+        "tags": [
+          "Merchant API - Operations - Global"
+        ],
+        "summary": "Get the operation status",
+        "operationId": "GetOperationStatus",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": "true",
+            "type": "string",
+            "format": "CorrelationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The operation status",
+            "schema": {
+              "$ref": "#/definitions/operationStatusIndex"
+            }
+          },
+          "303": {
+            "description": "The operation is completed so the resource is up to date now! \nFor more information, please read this: https://www.adayinthelifeof.nl/2011/06/02/asynchronous-operations-in-rest/\n",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "The location to the resource"
+              }
+            }
+          },
+          "404": {
+            "description": "The operation status not found",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
     "/merchant/marketplaces/v1/{merchantCode}": {
       "get": {
         "tags": [
@@ -2782,6 +2833,201 @@
     }
   },
   "definitions": {
+    "operationStatusIndex": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/operationStatusInfo"
+          }
+        },
+        "apiGetDependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiGetDependenciesInfo"
+          }
+        },
+        "projections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/operationProjectionStatusInfo"
+          }
+        }
+      }
+    },
+    "operationStatusInfo": {
+      "type": "object",
+      "required": [
+        "tenantApp",
+        "name",
+        "started"
+      ],
+      "properties": {
+        "tenantApp": {
+          "$ref": "#/definitions/tenantApp"
+        },
+        "name": {
+          "type": "string"
+        },
+        "started": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "apiGetDependenciesInfo": {
+      "type": "object",
+      "required": [
+        "uri",
+        "tenantApps"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string"
+        },
+        "tenantApps": {
+          "type": "array",
+          "minItems": "1",
+          "items": {
+            "$ref": "#/definitions/tenantApp"
+          }
+        }
+      }
+    },
+    "tenantApp": {
+      "type": "object",
+      "required": [
+        "tenant",
+        "app"
+      ],
+      "properties": {
+        "tenant": {
+          "type": "string"
+        },
+        "app": {
+          "type": "string"
+        }
+      }
+    },
+    "operationProjectionStatusInfo": {
+      "type": "object",
+      "required": [
+        "tenantApp",
+        "lastUpdateUtcDate"
+      ],
+      "properties": {
+        "tenantApp": {
+          "$ref": "#/definitions/tenantApp"
+        },
+        "lastUpdateUtcDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastMessageId": {
+          "type": "string"
+        },
+        "lastMessageName": {
+          "type": "string"
+        },
+        "transactionInfo": {
+          "$ref": "#/definitions/operationTransactionInfo"
+        },
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "operationTransactionInfo": {
+      "type": "object",
+      "required": [
+        "id",
+        "messageNumber",
+        "messageCount"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "messageNumber": {
+          "type": "integer"
+        },
+        "messageCount": {
+          "type": "integer"
+        }
+      }
+    },
+    "errorResponseMessage": {
+      "x-exclude": "true",
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "uniqueItems": "false",
+          "items": {
+            "$ref": "#/definitions/userErrorMessage"
+          }
+        }
+      }
+    },
+    "userErrorMessage": {
+      "x-exclude": "true",
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "docUrl": {
+          "$ref": "#/definitions/docUrl"
+        },
+        "code": {
+          "$ref": "#/definitions/errorCode"
+        },
+        "message": {
+          "type": "string",
+          "description": "The error message",
+          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
+        },
+        "cultureName": {
+          "$ref": "#/definitions/cultureName"
+        },
+        "arguments": {
+          "$ref": "#/definitions/userErrorMessageArguments"
+        }
+      }
+    },
+    "docUrl": {
+      "x-exclude": "true",
+      "type": "string",
+      "format": "uri",
+      "description": "The documentation related to this operation.",
+      "example": "https://api-docs.imn.io/#operation/EnableChannelCatalog"
+    },
+    "errorCode": {
+      "x-exclude": "true",
+      "type": "string",
+      "description": "the error code. The error code can be a pattern containing the argument's name",
+      "example": "CatalogImportationAlreadyInProgress(ExecutionId currentCatalogImportationId)"
+    },
+    "cultureName": {
+      "x-exclude": "true",
+      "type": "string",
+      "description": "If the error is translated, the culture name will be indicated",
+      "example": "en",
+      "x-lov": "Go2CultureName"
+    },
+    "userErrorMessageArguments": {
+      "x-exclude": "true",
+      "type": "object",
+      "description": "a dictionary string/object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
     "links.GetMarketplaceApiCredentialLink": {
       "allOf": [
         {
@@ -3164,22 +3410,6 @@
         }
       }
     },
-    "errorResponseMessage": {
-      "x-exclude": "true",
-      "type": "object",
-      "required": [
-        "errors"
-      ],
-      "properties": {
-        "errors": {
-          "type": "array",
-          "uniqueItems": "false",
-          "items": {
-            "$ref": "#/definitions/userErrorMessage"
-          }
-        }
-      }
-    },
     "marketplaceSubscriptionStatus": {
       "description": "The subscription status",
       "type": "string",
@@ -3275,33 +3505,6 @@
       "x-pattern": "^([0-9]{1,13}[.]*[0-9]{0,6})$",
       "example": "42.01"
     },
-    "userErrorMessage": {
-      "x-exclude": "true",
-      "type": "object",
-      "required": [
-        "code",
-        "message"
-      ],
-      "properties": {
-        "docUrl": {
-          "$ref": "#/definitions/docUrl"
-        },
-        "code": {
-          "$ref": "#/definitions/errorCode"
-        },
-        "message": {
-          "type": "string",
-          "description": "The error message",
-          "example": "There is already an importation in progress: b24d0dd8-a561-478a-9b26-34f573f03527\n"
-        },
-        "cultureName": {
-          "$ref": "#/definitions/cultureName"
-        },
-        "arguments": {
-          "$ref": "#/definitions/userErrorMessageArguments"
-        }
-      }
-    },
     "LOVLink3": {
       "x-exclude": "true",
       "description": "Describe the way you have to follow to get access to the LOV",
@@ -3355,34 +3558,6 @@
         "Same",
         "Fixed"
       ]
-    },
-    "docUrl": {
-      "x-exclude": "true",
-      "type": "string",
-      "format": "uri",
-      "description": "The documentation related to this operation.",
-      "example": "https://api-docs.imn.io/#operation/EnableChannelCatalog"
-    },
-    "errorCode": {
-      "x-exclude": "true",
-      "type": "string",
-      "description": "the error code. The error code can be a pattern containing the argument's name",
-      "example": "CatalogImportationAlreadyInProgress(ExecutionId currentCatalogImportationId)"
-    },
-    "cultureName": {
-      "x-exclude": "true",
-      "type": "string",
-      "description": "If the error is translated, the culture name will be indicated",
-      "example": "en",
-      "x-lov": "Go2CultureName"
-    },
-    "userErrorMessageArguments": {
-      "x-exclude": "true",
-      "type": "object",
-      "description": "a dictionary string/object",
-      "additionalProperties": {
-        "type": "object"
-      }
     },
     "httpMethod": {
       "x-exclude": "true",
@@ -7094,6 +7269,12 @@
     "url": "https://api-docs.imn.io/"
   },
   "x-tagGroups": [
+    {
+      "name": "Merchant API - Operations",
+      "tags": [
+        "Merchant API - Operations - Global"
+      ]
+    },
     {
       "name": "Merchant API - Marketplaces",
       "tags": [
