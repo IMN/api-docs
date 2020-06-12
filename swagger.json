@@ -2694,17 +2694,6 @@
             "$ref": "#/parameters/skuListQueryOptionalParameter"
           },
           {
-            "name": "operationTypes",
-            "in": "query",
-            "required": false,
-            "description": "The operation type done on the offer",
-            "type": "array",
-            "collectionFormat": "csv",
-            "items": {
-              "type": "string"
-            }
-          },
-          {
             "name": "minPrice",
             "in": "query",
             "required": false,
@@ -2737,18 +2726,22 @@
             "x-example": "10"
           },
           {
-            "name": "sortBy",
-            "in": "query",
+            "name": "minLastUpdateUtcDate",
             "required": false,
+            "in": "query",
             "type": "string",
-            "format": "OfferListSortBy?"
+            "format": "DateTime?",
+            "description": "The min last update utc date",
+            "x-example": "2020-06-10T19:26:42Z"
           },
           {
-            "name": "sortDirection",
-            "in": "query",
+            "name": "maxLastUpdateUtcDate",
             "required": false,
+            "in": "query",
             "type": "string",
-            "format": "Sort?"
+            "format": "DateTime?",
+            "description": "The max last update utc date",
+            "x-example": "2020-06-11T15:31:00Z"
           }
         ],
         "responses": {
