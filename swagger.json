@@ -2988,7 +2988,7 @@
         "tags": [
           "Merchant API - Offers - Global"
         ],
-        "summary": "Get merchant offer",
+        "summary": "Get merchant marketplace offer",
         "operationId": "GetMerchantMarketplaceOffer",
         "parameters": [
           {
@@ -3022,7 +3022,7 @@
         "tags": [
           "Merchant API - Offers - Global"
         ],
-        "summary": "Get merchant offer history",
+        "summary": "Get merchant marketplace offer history",
         "operationId": "GetMerchantMarketplaceOfferHistory",
         "parameters": [
           {
