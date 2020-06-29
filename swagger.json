@@ -783,6 +783,86 @@
         }
       }
     },
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/disableOfferPublication": {
+      "post": {
+        "tags": [
+          "Merchant API - Marketplaces - Target Marketplace Activation"
+        ],
+        "summary": "Disable offer publication for this marketplace",
+        "operationId": "DisableOfferPublication",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The marketplace offer publication has been disabled",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "The location to monitor the progression of the operation in the IMN system"
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/responses/merchantOrMarketplaceNotFound"
+          },
+          "400": {
+            "$ref": "#/responses/invalidMerchantCode"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/merchant/marketplaces/v1/{merchantCode}/{marketplaceCode}/reenableOfferPublication": {
+      "post": {
+        "tags": [
+          "Merchant API - Marketplaces - Target Marketplace Activation"
+        ],
+        "summary": "Reenable offer publication for this marketplace",
+        "operationId": "ReenableOfferPublication",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The marketplace offer publication has been reenabled",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "The location to monitor the progression of the operation in the IMN system"
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/responses/merchantOrMarketplaceNotFound"
+          },
+          "400": {
+            "$ref": "#/responses/invalidMerchantCode"
+          },
+          "403": {
+            "$ref": "#/responses/subscriptionNotAccepted"
+          },
+          "412": {
+            "$ref": "#/responses/credentialNotConfigured"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
     "/merchant/account/v1/": {
       "get": {
         "tags": [
