@@ -3710,6 +3710,34 @@
         }
       ]
     },
+    "links.DisableOfferPublicationLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/merchant/marketplaces/v1/MLT01/E1/disableOfferPublication",
+            "method": "POST"
+          }
+        }
+      ]
+    },
+    "links.ReenableOfferPublicationLink": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/link3"
+        },
+        {
+          "type": "object",
+          "example": {
+            "href": "/merchant/marketplaces/v1/MLT01/E1/reenableOfferPublication",
+            "method": "POST"
+          }
+        }
+      ]
+    },
     "links.GetMarketplaceSubscriptionReportingLink": {
       "allOf": [
         {
@@ -3791,6 +3819,12 @@
         },
         "reporting": {
           "$ref": "#/definitions/links.GetMarketplaceSubscriptionReportingLink"
+        },
+        "disableOfferPublication": {
+          "$ref": "#/definitions/links.DisableOfferPublicationLink"
+        },
+        "reenableOfferPublication": {
+          "$ref": "#/definitions/links.ReenableOfferPublicationLink"
         }
       }
     },
