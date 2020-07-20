@@ -3843,9 +3843,14 @@
       "type": "object",
       "description": "The status of the offer publication to the target marketplace",
       "required": [
+        "enabled",
         "apiIntegrationStatus"
       ],
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "example": "true"
+        },
         "apiIntegrationStatus": {
           "$ref": "#/definitions/marketplaceApiIntegrationStatus"
         },
@@ -3855,16 +3860,28 @@
           "description": "The publishable offer count for this target marketplace (considering the product matching)",
           "example": "25"
         },
+        "pushedOfferCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The pushed offer count to this target marketplace",
+          "example": "20"
+        },
+        "pushedOfferCountLastSynchronizationUtcDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The push offer count last synchronization to the target marketplace",
+          "example": "2018-12-25T23:39:00Z"
+        },
         "publishedOfferCount": {
           "type": "integer",
           "format": "int32",
-          "description": "The published offer count to this target marketplace",
+          "description": "The published offer count to this target marketplace - PREVIEW",
           "example": "20"
         },
         "lastPublicationUtcDate": {
           "type": "string",
           "format": "date-time",
-          "description": "The last synchronization of the offers from the source marketplace",
+          "description": "The last synchronization of the offers from the target marketplace - PREVIEW",
           "example": "2018-12-25T23:39:00Z"
         }
       }
@@ -3877,9 +3894,6 @@
         {
           "type": "object",
           "properties": {
-            "offersPublicationStatus": {
-              "$ref": "#/definitions/offersPublicationStatus"
-            },
             "offersSourceStatus": {
               "$ref": "#/definitions/offersSourceStatus"
             }
@@ -3887,13 +3901,47 @@
         }
       ]
     },
+    "ordersImportationStatus": {
+      "type": "object",
+      "description": "The status of the order importation from the marketplace",
+      "required": [
+        "enabled",
+        "apiIntegrationStatus"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "apiIntegrationStatus": {
+          "$ref": "#/definitions/marketplaceApiIntegrationStatus"
+        },
+        "lastSynchronizationUtcDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The last synchronization of the orders from the marketplace",
+          "example": "2018-12-24T23:39:00Z"
+        },
+        "importedOrderCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The imported order count from the marketplace",
+          "example": "52"
+        }
+      }
+    },
     "offersSourceStatus": {
       "type": "object",
       "description": "The status of the offer importation from the source marketplace",
       "required": [
+        "enabled",
         "apiIntegrationStatus"
       ],
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "example": "true"
+        },
         "apiIntegrationStatus": {
           "$ref": "#/definitions/marketplaceApiIntegrationStatus"
         },
@@ -3971,6 +4019,14 @@
           "$ref": "#/definitions/marketplacePricingValue"
         }
       }
+    },
+    "marketplaceApiIntegrationStatus": {
+      "type": "string",
+      "enum": [
+        "Up",
+        "Down",
+        "Paused"
+      ]
     },
     "marketplaceSubscriptionStatus": {
       "description": "The subscription status",
@@ -4215,14 +4271,6 @@
       "enum": [
         "NotConfigured",
         "Configured"
-      ]
-    },
-    "marketplaceApiIntegrationStatus": {
-      "type": "string",
-      "enum": [
-        "Up",
-        "Down",
-        "Paused"
       ]
     },
     "link3": {
