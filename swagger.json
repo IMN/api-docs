@@ -5370,6 +5370,7 @@
     },
     "offerExclusionFilterCondition": {
       "x-exclude": true,
+      "x-extendedDiscriminator": "type",
       "type": "object",
       "required": [
         "position",
