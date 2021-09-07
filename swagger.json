@@ -3753,6 +3753,46 @@
         }
       }
     },
+    "/merchant/offers/v1/{merchantCode}/{marketplaceCode}/disabled/count": {
+      "head": {
+        "tags": [
+          "Merchant API - Offers - Deactivation"
+        ],
+        "summary": "Get merchant marketplace disabled offer count",
+        "operationId": "GetMerchantMarketplaceDisabledOfferCount",
+        "parameters": [
+          {
+            "$ref": "#/parameters/merchantCodeParameter"
+          },
+          {
+            "$ref": "#/parameters/marketplaceCodeParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The merchant marketplace disabled offer count",
+            "headers": {
+              "X-Total-Count": {
+                "type": "integer",
+                "description": "The count of disabled offers"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search criteria",
+            "schema": {
+              "$ref": "#/definitions/errorResponseMessage"
+            }
+          },
+          "404": {
+            "$ref": "#/responses/merchantOrMarketplaceNotFound"
+          },
+          "default": {
+            "$ref": "#/responses/GeneralError"
+          }
+        }
+      }
+    },
     "/merchant/offers/v1/{merchantCode}/{marketplaceCode}/disabled": {
       "head": {
         "tags": [
