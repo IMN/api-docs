@@ -3703,7 +3703,7 @@
             }
           },
           {
-            "name": "publicationFailtureReasonList",
+            "name": "publicationFailureReasonList",
             "in": "query",
             "type": "array",
             "collectionFormat": "csv",
